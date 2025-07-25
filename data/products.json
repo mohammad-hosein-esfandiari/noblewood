@@ -1,0 +1,149 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "Classic Wooden Chair",
+      "price": 299,
+      "category": "chairs",
+      "woodType": "walnut",
+      "image": "https://images.pexels.com/photos/1148955/pexels-photo-1148955.jpeg",
+      "description": "Beautiful and durable chair made from premium walnut wood with classic design and superior comfort",
+      "dimensions": "18\" x 20\" x 35\"",
+      "inStock": true
+    },
+    {
+      "id": 2,
+      "name": "Dining Table Set",
+      "price": 899,
+      "category": "tables",
+      "woodType": "oak",
+      "image": "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg",
+      "description": "Large and beautiful dining table made from oak wood for 6 people",
+      "dimensions": "71\" x 35\" x 30\"",
+      "inStock": true
+    },
+    {
+      "id": 3,
+      "name": "Decorative Wooden Box",
+      "price": 79,
+      "category": "decorative",
+      "woodType": "pine",
+      "image": "https://images.pexels.com/photos/4207892/pexels-photo-4207892.jpeg",
+      "description": "Beautiful decorative box made from pine wood for storing small items",
+      "dimensions": "10\" x 6\" x 4\"",
+      "inStock": true
+    },
+    {
+      "id": 4,
+      "name": "Modern Bookcase",
+      "price": 1299,
+      "category": "bookcase",
+      "woodType": "ash",
+      "image": "https://images.pexels.com/photos/1586298/pexels-photo-1586298.jpeg",
+      "description": "5-tier bookcase made from ash wood with modern design",
+      "dimensions": "47\" x 14\" x 71\"",
+      "inStock": true
+    },
+    {
+      "id": 5,
+      "name": "Queen Size Bed Frame",
+      "price": 1599,
+      "category": "bedroom",
+      "woodType": "walnut",
+      "image": "https://images.pexels.com/photos/1743229/pexels-photo-1743229.jpeg",
+      "description": "Luxury queen size bed frame made from walnut wood with minimalist design",
+      "dimensions": "79\" x 63\" x 39\"",
+      "inStock": true
+    },
+    {
+      "id": 6,
+      "name": "Executive Office Chair",
+      "price": 449,
+      "category": "chairs",
+      "woodType": "oak",
+      "image": "https://images.pexels.com/photos/1080696/pexels-photo-1080696.jpeg",
+      "description": "Comfortable office chair with oak wood base and leather upholstery",
+      "dimensions": "24\" x 22\" x 43\"",
+      "inStock": true
+    },
+    {
+      "id": 7,
+      "name": "Work Desk",
+      "price": 599,
+      "category": "tables",
+      "woodType": "ash",
+      "image": "https://images.pexels.com/photos/4946515/pexels-photo-4946515.jpeg",
+      "description": "Stylish and functional work desk made from ash wood with hidden drawers",
+      "dimensions": "47\" x 24\" x 30\"",
+      "inStock": true
+    },
+    {
+      "id": 8,
+      "name": "Decorative Mirror",
+      "price": 199,
+      "category": "decorative",
+      "woodType": "pine",
+      "image": "https://images.pexels.com/photos/1090638/pexels-photo-1090638.jpeg",
+      "description": "Decorative mirror with pine wood frame and unique design",
+      "dimensions": "31\" x 24\" x 1\"",
+      "inStock": true
+    },
+    {
+      "id": 9,
+      "name": "Two-Door Wardrobe",
+      "price": 1899,
+      "category": "bedroom",
+      "woodType": "walnut",
+      "image": "https://images.pexels.com/photos/6585751/pexels-photo-6585751.jpeg",
+      "description": "Large two-door wardrobe made from walnut wood with classic design",
+      "dimensions": "47\" x 24\" x 79\"",
+      "inStock": true
+    },
+    {
+      "id": 10,
+      "name": "Console Table",
+      "price": 349,
+      "category": "tables",
+      "woodType": "oak",
+      "image": "https://images.pexels.com/photos/1457842/pexels-photo-1457842.jpeg",
+      "description": "Elegant console table for entryway made from oak wood",
+      "dimensions": "39\" x 14\" x 31\"",
+      "inStock": true
+    },
+    {
+      "id": 11,
+      "name": "Modular Wall Shelf",
+      "price": 299,
+      "category": "bookcase",
+      "woodType": "ash",
+      "image": "https://images.pexels.com/photos/6782351/pexels-photo-6782351.jpeg",
+      "description": "Modular wall shelf made from ash wood, combinable and adjustable",
+      "dimensions": "31\" x 10\" x 31\"",
+      "inStock": true
+    },
+    {
+      "id": 12,
+      "name": "Jewelry Box",
+      "price": 99,
+      "category": "decorative",
+      "woodType": "walnut",
+      "image": "https://images.pexels.com/photos/6143206/pexels-photo-6143206.jpeg",
+      "description": "Handcrafted jewelry box made from walnut wood with intricate carvings",
+      "dimensions": "8\" x 6\" x 3\"",
+      "inStock": true
+    }
+  ],
+  "categories": [
+    { "id": "chairs", "name": "Wooden Chairs", "icon": "🪑" },
+    { "id": "tables", "name": "Wooden Tables", "icon": "🪑" },
+    { "id": "decorative", "name": "Decorative Items", "icon": "📦" },
+    { "id": "bedroom", "name": "Bedroom Sets", "icon": "🛏️" },
+    { "id": "bookcase", "name": "Bookcases", "icon": "📚" }
+  ],
+  "woodTypes": [
+    { "id": "walnut", "name": "Walnut Wood", "color": "#8B4513" },
+    { "id": "oak", "name": "Oak Wood", "color": "#D2B48C" },
+    { "id": "ash", "name": "Ash Wood", "color": "#F5DEB3" },
+    { "id": "pine", "name": "Pine Wood", "color": "#DEB887" }
+  ]
+}
