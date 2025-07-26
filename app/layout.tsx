@@ -2,7 +2,7 @@ import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { CartProvider } from '@/contexts/CartContext';
-import Header from '@/components/Header';
+import Header from '@/components/global/Header/Header';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -53,7 +53,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" dir="ltr">
-      <body className={inter.className}>
+      <body cz-shortcut-listen="true" className={inter.className}>
         <CartProvider>
           <Header />
           <main >{children}</main>

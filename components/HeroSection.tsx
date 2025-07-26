@@ -12,7 +12,7 @@ export default function HeroSection() {
   }, []);
 
   return (
-    <section className="hero-section relative min-h-screen flex items-center justify-center overflow-hidden pb-32">
+    <section className="hero-section  relative min-h-screen flex items-center justify-center overflow-hidden pb-32">
       {/* Parallax Background */}
       <div 
         className="absolute inset-0 bg-gradient-to-br from-amber-900 via-amber-800 to-orange-900"
@@ -29,7 +29,7 @@ export default function HeroSection() {
       </div>
 
       {/* Floating Elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none px-4 sm:px-6 lg:px-8">
         {[...Array(6)].map((_, i) => (
           <div
             key={i}
@@ -44,9 +44,9 @@ export default function HeroSection() {
         ))}
       </div>
 
-      <div className="relative z-10 text-center max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative  z-10 text-center max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 ">
         {/* Main Content */}
-        <div className="relative pt-[100px] mb-12 animate-fade-in-up  flex items-center justify-center flex-col">
+        <div className="relative pt-[150px] mb-12 animate-fade-in-up  flex items-center justify-center flex-col px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-center mb-6">
             <Sparkles className="w-8 h-8 text-amber-300 mr-3 animate-pulse" />
             <span className="text-amber-200 font-medium tracking-wider uppercase text-sm">
@@ -55,17 +55,17 @@ export default function HeroSection() {
             <Sparkles className="w-8 h-8 text-amber-300 ml-3 animate-pulse" />
           </div>
           
-          <h1 className="text-6xl md:text-8xl font-bold text-white mb-8 leading-tight">
+          <h1 className="text-4xl sm:text-6xl md:text-8xl font-bold text-white mb-8 leading-tight">
             <span className="bg-gradient-to-r from-amber-200 via-amber-100 to-white bg-clip-text text-transparent animate-gradient">
               NobleWood
             </span>
             <br />
-            <span className="text-3xl md:text-5xl font-light text-amber-100 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
+            <span className="text-xl sm:text-3xl md:text-5xl font-light text-amber-100 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
               Crafted with Passion
             </span>
           </h1>
           
-          <p className="text-xl md:text-2xl text-amber-100/90 mb-12 max-w-4xl mx-auto leading-relaxed animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
+          <p className="text-md md:text-2xl text-amber-100/90 mb-12 max-w-4xl mx-auto leading-relaxed animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
             Discover our exclusive collection of handcrafted wooden furniture, 
             where traditional craftsmanship meets modern design to create timeless pieces 
             that transform your living space.
@@ -98,7 +98,7 @@ export default function HeroSection() {
         </div>
 
         {/* Features Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-20 animate-fade-in-up" style={{ animationDelay: '1.2s' }}>
+        <div className="grid px-4 sm:px-6 lg:px-8 grid-cols-1 md:grid-cols-3 gap-8 mt-20 animate-fade-in-up" style={{ animationDelay: '1.2s' }}>
           {[
             {
               icon: <Award className="w-8 h-8" />,
