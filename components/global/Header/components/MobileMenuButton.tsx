@@ -1,11 +1,8 @@
 import { Menu, X } from 'lucide-react'
 import React, { FC } from 'react'
-import { HeaderProps } from '../Header';
+import { HeaderProps, MobileMenuButtonProps } from '../Header';
 
-interface MobileMenuButtonProps extends HeaderProps {
-  isMenuOpen: boolean;
-    setIsMenuOpen: (isOpen: boolean) => void;
-}
+
 
 export const MobileMenuButton:FC<MobileMenuButtonProps> = ({isMenuOpen,isScrolled,setIsMenuOpen}) => {
   return (

@@ -1,30 +1,30 @@
 "use client";
-
-import Link from "next/link";
-import { ShoppingCart, Menu, X, TreePine } from "lucide-react";
-import { useCart } from "@/contexts/CartContext";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { Logo } from "./components/Logo";
 import { NavLinks } from "./components/NavLinks";
 import { CartButton } from "./components/CartButton";
 import { MobileMenuButton } from "./components/MobileMenuButton";
+import { MobileMenu } from "./components/MobileMenu";
 
 export interface HeaderProps {
   isScrolled: boolean; // Add any other props you might need
 }
+export interface MobileMenuButtonProps extends HeaderProps {
+  isMenuOpen: boolean;
+  setIsMenuOpen: (isOpen: boolean) => void;
+}
 
 export default function Header() {
-  
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const pathname = usePathname();
-  const noHeaderRoutes:String[] = ["/login", "/signup", "/forgot-password"];
+  const noHeaderRoutes: String[] = ["/login", "/signup", "/forgot-password"];
   const [isScrolled, setIsScrolled] = useState<boolean>(false);
 
   useEffect(() => {
     if (pathname !== "/") {
       setIsScrolled(true);
-      return; // دیگه نیازی به observer نیست
+      return;
     }
     const handleScroll = () => {
       const scrollTop = window.scrollY;
@@ -37,7 +37,7 @@ export default function Header() {
     };
 
     window.addEventListener("scroll", handleScroll);
-    handleScroll(); // برای بار اول
+    handleScroll();
 
     return () => window.removeEventListener("scroll", handleScroll);
   }, [pathname]);
@@ -60,47 +60,20 @@ export default function Header() {
 
           {/* Cart and Mobile Menu */}
           <div className="flex items-center space-x-4">
-
             <CartButton isScrolled={isScrolled} />
-
-            {/* Mobile menu button */}
-          <MobileMenuButton isMenuOpen={isMenuOpen} isScrolled={isScrolled} setIsMenuOpen={setIsMenuOpen}/>
+            <MobileMenuButton
+              isMenuOpen={isMenuOpen}
+              isScrolled={isScrolled}
+              setIsMenuOpen={setIsMenuOpen}
+            />
           </div>
         </div>
-
         {/* Mobile Navigation */}
-        <div
-          className={`md:hidden transition-all duration-500 overflow-hidden ${
-            isMenuOpen ? "max-h-64 opacity-100" : "max-h-0 opacity-0"
-          }`}>
-          <div
-            className={`py-4 space-y-2 ${
-              isScrolled ? "bg-amber-50" : "bg-white/95"
-            } backdrop-blur-lg rounded-2xl mt-4 shadow-xl border ${
-              isScrolled ? "border-amber-200" : "border-amber-100"
-            }`}>
-            {[
-              { href: "/", label: "Home" },
-              { href: "#products", label: "Products" },
-              { href: "#about", label: "About" },
-              { href: "#contact", label: "Contact" },
-              { href: "/login", label: "Login" },
-            ].map((item, index) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`block px-6 py-3 transition-all duration-300 font-medium ${
-                  isScrolled
-                    ? "text-amber-900 hover:text-amber-700 hover:bg-amber-100"
-                    : "text-gray-700 hover:text-amber-700 hover:bg-amber-50"
-                }`}
-                onClick={() => setIsMenuOpen(false)}
-                style={{ animationDelay: `${index * 100}ms` }}>
-                {item.label}
-              </Link>
-            ))}
-          </div>
-        </div>
+        <MobileMenu
+          isMenuOpen={isMenuOpen}
+          isScrolled={isScrolled}
+          setIsMenuOpen={setIsMenuOpen}
+        />
       </div>
     </div>
   );

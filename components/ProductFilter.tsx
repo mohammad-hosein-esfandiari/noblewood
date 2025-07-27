@@ -61,7 +61,7 @@ export default function ProductFilter({
           </div>
           <div>
             <h3 className="text-xl font-bold text-gray-800">Filter Products</h3>
-            <p className="text-sm text-gray-500">Find exactly what you're looking for</p>
+            <p className="text-sm text-gray-500">Find exactly what youre looking for</p>
           </div>
         </div>
         

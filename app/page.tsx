@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
-import HeroSection from '@/components/HeroSection';
+import HeroSection from '@/components/pages/home/components/HeroSection/HeroSection';
 import ProductCard from '@/components/ProductCard';
 import ProductFilter from '@/components/ProductFilter';
 import Pagination from '@/components/Pagination';
@@ -138,8 +138,7 @@ export default function Home() {
   
 
   return (
-    <div className="" ref={mainRef}>
-
+    <div className="">
         <HeroSection />
 
       
@@ -149,6 +148,12 @@ export default function Home() {
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div 
             className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-amber-300/20 to-yellow-200/20 rounded-full blur-3xl"
+            style={{ transform: `translateY(${scrollY * -0.1}px)` }}
+          />
+        </div>
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div 
+            className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-amber-300/20 to-yellow-200/20 rounded-full blur-3xl"
             style={{ transform: `translateY(${scrollY * -0.1}px)` }}
           />
         </div>
