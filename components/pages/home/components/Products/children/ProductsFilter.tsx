@@ -87,6 +87,8 @@ export const ProductsFilter = () => {
           isOpen ? "block" : "hidden md:grid"
         }`}
       >
+
+
         {filters.map(({ id, title, items }) => (
           <FilterBox
             key={id}
