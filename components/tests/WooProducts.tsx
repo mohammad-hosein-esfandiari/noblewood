@@ -7,7 +7,7 @@ const ProductsPage = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('/api/products')
+    fetch('/api/routes/products')
       .then(res => res.json())
       .then(data => {
         setProducts(data.result);

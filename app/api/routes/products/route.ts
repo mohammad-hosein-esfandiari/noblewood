@@ -1,18 +1,11 @@
 // app/api/woocommerce/products/route.ts (Next.js 13+ API route)
 import { NextResponse } from 'next/server';
-import WooCommerceRestApi from '@woocommerce/woocommerce-rest-api';
-
-const api = new WooCommerceRestApi({
-  url: process.env.WOOCOMMERCE_URL!,
-  consumerKey: process.env.WOOCOMMERCE_CONSUMER_KEY!,
-  consumerSecret: process.env.WOOCOMMERCE_CONSUMER_SECRET!,
-  version: 'wc/v3',
-});
+import { wocommerceAPI } from '../../config/woocommerce';
 
 
 export async function GET() {
   try {
-    const response = await api.get('products');
+    const response = await wocommerceAPI.get('products');
     return NextResponse.json({
       status: 'success',
       statusCode: 200,

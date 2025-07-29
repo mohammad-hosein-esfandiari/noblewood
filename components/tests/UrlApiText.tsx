@@ -25,7 +25,7 @@ export default function SiteInfo() {
     console.log('Base URL:', window.location.origin);
     async function fetchSiteInfo() {
       try {
-        const res = await fetch('http://noblewood.local/wp-json/custom/v1/site-info', {
+        const res = await fetch('/api/routes/site-info', {
           method: 'GET'
         });
 

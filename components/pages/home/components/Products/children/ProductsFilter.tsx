@@ -1,14 +1,19 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { FC, useState } from "react";
 import { Head } from "./ProductsFilter/Head";
 import { FilterBox } from "./ProductsFilter/FilterBox";
+import { Category } from "@/types/category";
 
 export interface FilterQueries {
   [key: string]: string;
 }
 
-export const ProductsFilter = () => {
+interface ProductsFilterProps {
+  categories:Category[]
+}
+
+export const ProductsFilter:FC<ProductsFilterProps> = ({categories}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [queries, setQueries] = useState<FilterQueries>({
     category: "all",
@@ -39,14 +44,7 @@ export const ProductsFilter = () => {
     {
       id: "category",
       title: "Categories",
-      items: [
-        { id: "all", name: "All Categories" },
-        { id: "furniture", name: "Furniture" },
-        { id: "decor", name: "Decor" },
-        { id: "accessories", name: "Accessories" },
-        { id: "lighting", name: "Lighting" },
-        { id: "outdoor", name: "Outdoor" },
-      ],
+      items: categories,
     },
     {
       id: "woodType",

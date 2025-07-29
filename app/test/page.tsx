@@ -4,12 +4,15 @@ import WooProducts from "@/components/tests/WooProducts";
 import React from "react";
 
 
-export default function Test() {
+export default async function Test() {
+
+
+
   return (
     <>
       <Home />
-      <SiteInfo/>
-      <WooProducts/>
+      {/* <SiteInfo/>
+      <WooProducts/> */}
     </>
   );
 };

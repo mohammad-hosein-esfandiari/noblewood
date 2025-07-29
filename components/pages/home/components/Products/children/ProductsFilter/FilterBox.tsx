@@ -9,7 +9,7 @@ interface itemsProps {
 }
 
 interface SelectBoxProps {
-  items: itemsProps[] | [];
+  items: any[] | [];
   title: string;
   id: string;
   callback: (key: string, value: string) => void;
@@ -36,6 +36,7 @@ export const FilterBox: FC<SelectBoxProps> = ({
           value={query}
           onChange={(e) => handleFilterChange(id, e.target.value)}
           className="w-full p-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 bg-white text-gray-800 font-medium appearance-none cursor-pointer hover:border-amber-300 transition-all duration-300">
+        <option value="all">All Categories</option>
           {items.map((category: itemsProps) => (
             <option key={category.id} value={category.id}>
               {category.icon} {category.name}
