@@ -4,16 +4,18 @@ import React, { FC, useState } from "react";
 import { Head } from "./ProductsFilter/Head";
 import { FilterBox } from "./ProductsFilter/FilterBox";
 import { Category } from "@/types/category";
+import { Brand } from "@/types/brands";
 
 export interface FilterQueries {
   [key: string]: string;
 }
 
 interface ProductsFilterProps {
-  categories:Category[]
+  categories:Category[];
+  brands :Brand[]
 }
 
-export const ProductsFilter:FC<ProductsFilterProps> = ({categories}) => {
+export const ProductsFilter:FC<ProductsFilterProps> = ({categories,brands}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [queries, setQueries] = useState<FilterQueries>({
     category: "all",
@@ -49,14 +51,7 @@ export const ProductsFilter:FC<ProductsFilterProps> = ({categories}) => {
     {
       id: "woodType",
       title: "Wood Types",
-      items: [
-        { id: "all", name: "All Wood Types" },
-        { id: "oak", name: "Oak" },
-        { id: "walnut", name: "Walnut" },
-        { id: "maple", name: "Maple" },
-        { id: "teak", name: "Teak" },
-        { id: "mahogany", name: "Mahogany" },
-      ],
+      items: brands,
     },
     {
       id: "priceRange",
