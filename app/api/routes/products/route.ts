@@ -35,6 +35,7 @@ export async function GET() {
       statusCode: 200,
       message: 'Products fetched successfully',
       result:homeProductsCardArray,
+      data:response.data
     });
   } catch (error: any) {
     console.error('WooCommerce error:', error.message);

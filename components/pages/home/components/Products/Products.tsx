@@ -17,7 +17,7 @@ export const Products: FC<ProductsProp> = ({
   brands,
   products,
 }) => {
-  console.log(products);
+
 
   return (
     <div className="py-32 px-4 sm:px-6 lg:px-8 bg-gray-50 relative overflow-hidden">

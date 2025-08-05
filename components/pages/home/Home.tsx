@@ -39,6 +39,7 @@ export const Home = async () => {
     });
     const products = await res3.json()
 
+console.log(products.data)
    
   return (
     <div>

@@ -46,7 +46,7 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
     }).format(price);
   };
 
-  console.log(product)
+  // console.log(product)
   return (
     <div
       className="group bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-700 overflow-hidden transform hover:scale-[1.02] hover:-translate-y-2 animate-fade-in-up"
