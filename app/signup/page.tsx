@@ -37,6 +37,7 @@ export default function SignupPage() {
     // In a real app, you would handle the signup logic here
     console.log('Signup data:', formData);
     
+    
     setIsLoading(false);
     router.push('/login');
   };
