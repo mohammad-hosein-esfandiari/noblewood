@@ -8,7 +8,7 @@ import { MobileMenuButton } from "./components/MobileMenuButton";
 import { MobileMenu } from "./components/MobileMenu";
 
 export interface HeaderProps {
-  isScrolled: boolean; // Add any other props you might need
+  isScrolled?: boolean; // Add any other props you might need
 }
 export interface MobileMenuButtonProps extends HeaderProps {
   isMenuOpen: boolean;
