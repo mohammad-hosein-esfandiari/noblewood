@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { CartProvider } from '@/contexts/CartContext';
 import Header from '@/components/global/Header/Header';
+import  { Toaster } from 'react-hot-toast';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -55,6 +56,7 @@ export default function RootLayout({
     <html lang="en" dir="ltr">
       <body cz-shortcut-listen="true" className={inter.className}>
         <CartProvider>
+        <Toaster containerStyle={{fontSize:"13px"}}/>
           <Header />
           <main >{children}</main>
         </CartProvider>
