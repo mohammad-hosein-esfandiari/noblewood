@@ -1,7 +1,7 @@
 import { Brand } from "@/types/brands";
 import { Category } from "@/types/category";
 import { ChevronDown } from "lucide-react";
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 
 interface itemsProps {
   id: string;
@@ -18,21 +18,6 @@ interface SelectBoxProps {
   query: string;
 }
 
-function flattenCategories(categories: itemsProps[], level: number = 0): itemsProps[] {
-  const result: itemsProps[] = [];
-  for (const cat of categories) {
-    result.push({
-      ...cat,
-      name: `${"  ".repeat(level)}${level > 0 ? "↳ " : ""}${cat.name}`,
-    });
-
-    if (cat.children?.length) {
-      result.push(...flattenCategories(cat.children, level + 1));
-    }
-  }
-  return result;
-}
-
 export const FilterBox: FC<SelectBoxProps> = ({
   items = [],
   title,
@@ -40,33 +25,135 @@ export const FilterBox: FC<SelectBoxProps> = ({
   callback,
   query,
 }) => {
+  const [isHovered, setIsHovered] = React.useState(false);
+  const [selectedCategory, setSelectedCategory] = React.useState(
+    "Select" + " " + title
+  );
+  const [openUp, setOpenUp] = React.useState(false);
+  const containerRef = React.useRef<HTMLDivElement>(null);
+
   const handleFilterChange = (key: string, value: string) => {
     callback(key, value);
   };
 
-  const flattenedItems = id == "category" ? flattenCategories(items) : items;
+
+  const handleMouseEnter = () => {
+    if (containerRef.current) {
+      const rect = containerRef.current.getBoundingClientRect();
+      const spaceBelow = window.innerHeight - rect.bottom;
+      const dropdownHeight = 200; // حدود ارتفاع دراپ‌داون (حدس زده)
+      if (spaceBelow < dropdownHeight) {
+        setOpenUp(true);
+      } else {
+        setOpenUp(false);
+      }
+    }
+    setIsHovered(true);
+  };
+
+  const handleCategoryClick = (
+    event: React.MouseEvent<HTMLElement>,
+    category: string ,
+    queryValue: string = "all"
+  ) => {
+    event?.stopPropagation(); // جلوگیری از بسته شدن دراپ‌داون هنگام کلیک روی گزینه
+    setSelectedCategory(category);
+    console.log(id, queryValue);
+    handleFilterChange(id, queryValue);
+    setIsHovered(false);
+  };
+
+  // یوزافکت برای بستن دراپداون هنگام کلیک بیرون
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(event.target as Node)
+      ) {
+        setIsHovered(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    // هنگام پاک‌سازی کامپوننت، لیسنر رو هم حذف کن
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
 
   return (
-    <div className="space-y-3">
-      <label className="block text-sm font-bold text-gray-700 mb-1">{title}</label>
-      <div className="relative">
-        <select
-          value={query}
-          onChange={(e) => handleFilterChange(id, e.target.value)}
-          className="w-full p-4 outline-none border border-gray-300 transition-all   rounded-xl pr-10 bg-white text-gray-700 shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 appearance-none"
-        >
-          <option value="all">All {title}</option>
-          {flattenedItems.map((category) => (
-            <option
-              key={category.id}
-              value={category.id}
-              className={category.children?.length ? "font-semibold" : ""}
-            >
-              {category.name}
-            </option>
-          ))}
-        </select>
-        <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none w-5 h-5" />
+    <div key={id + "_" + title} className=" text-gray-700 text-sm">
+      <label className="block text-sm font-bold text-gray-700 mb-1">
+        {title}
+      </label>
+      <div
+        ref={containerRef}
+        onClick={handleMouseEnter}
+        className={`relative ${isHovered ? "group-1" : ""}`}>
+        <button
+          type="button"
+          className="w-full relative p-4 border border-gray-300 rounded-xl bg-white text-gray-700 shadow-sm flex justify-between items-center focus:outline-none">
+          <span className="font-"> {selectedCategory} </span>
+          <ChevronDown className="absolute base-arrow rotate-[-90deg]  transition-all right-4 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none w-5 h-5" />
+        </button>
+        <nav
+          className={`absolute w-full z-10 ${isHovered ? "" : "hidden"} ${
+            openUp ? "bottom-full " : "top-full "
+          }`}>
+          <ul className="relative w-full bg-white border border-gray-300 rounded-xl  ">
+            <li onClick={(e)=> handleCategoryClick(e, `All ${title}` ,"all")} className="hover:text-amber-800 hover:font-bold px-4 py-3 cursor-pointer">
+              All {title}
+            </li>
+
+            {items.map((category) => {
+              if (category.children && category.children.length > 0) {
+                return (
+   
+                    <li data-value={query} key={category.id} className="group sub-group relative border-b last:border-b-0">
+                      <input id={category.id+"_input"} name={title+"_name"} type="radio" hidden />
+                      <label htmlFor={category.id+"_input"}   
+                        className="w-full relative px-4 py-3 text-left flex justify-between cursor-pointer items-center  hover:font-bold focus:outline-none">
+                        <span  onClick={(e) => handleCategoryClick(e, category.name , category.id)}className="hover:text-amber-800">{category.name}</span>
+                        <ChevronDown className="absolute rotate-[-90deg] child-arrow-icon transition-transform right-4 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none w-5 h-5" />
+
+                      </label>
+
+                      {/* زیرمنو */}
+                      {
+                        category.children && category.children.length > 0 ? (
+                          <ul className="sub_ul">
+                            {category.children.map((subCategory:any) => (
+                                <li
+                                    key={subCategory.id+"_sub"}
+                                    onClick={(e) =>
+                                      handleCategoryClick(e,"↳" + " " + subCategory.name , subCategory.id)
+                                    }
+                                    className="hover:text-amber-800 hover:font-bold px-4 py-2 cursor-pointer">
+                                  {subCategory.name}
+                                </li>
+                            ))}
+                          </ul>
+                        ) : null
+                      }
+
+                    </li>
+
+                );
+              }else{
+                return (
+                  <li
+                    key={category.id +"_li"}
+                    onClick={(e) => handleCategoryClick(e, category.name,category.id)}
+                    className="hover:text-amber-800 hover:font-bold px-4 py-3 cursor-pointer">
+                    {category.name}
+                  </li>
+                );
+              }
+            })}
+          </ul>
+        </nav>
       </div>
     </div>
   );

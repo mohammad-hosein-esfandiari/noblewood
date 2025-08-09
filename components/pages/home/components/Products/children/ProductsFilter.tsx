@@ -11,17 +11,22 @@ export interface FilterQueries {
 }
 
 interface ProductsFilterProps {
-  categories:Category[];
-  brands :Brand[]
+  categories: Category[];
+  brands: Brand[];
 }
 
-export const ProductsFilter:FC<ProductsFilterProps> = ({categories,brands}) => {
+export const ProductsFilter: FC<ProductsFilterProps> = ({
+  categories,
+  brands,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [queries, setQueries] = useState<FilterQueries>({
     category: "all",
     woodType: "all",
     priceRange: "all",
   });
+
+  console.log(categories);
 
   const handleFilterChange = (key: string, value: string) => {
     setQueries((prev) => ({
@@ -41,6 +46,7 @@ export const ProductsFilter:FC<ProductsFilterProps> = ({categories,brands}) => {
   const hasActiveFilters = Object.values(queries).some(
     (value) => value !== "all"
   );
+
 
   const filters = [
     {
@@ -78,13 +84,10 @@ export const ProductsFilter:FC<ProductsFilterProps> = ({categories,brands}) => {
       <div
         className={`grid grid-cols-1 md:grid-cols-3 gap-6 transition-all duration-500 ${
           isOpen ? "block" : "hidden md:grid"
-        }`}
-      >
-
-
+        }`}>
         {filters.map(({ id, title, items }) => (
           <FilterBox
-            key={id}
+            key={id+"_box"}
             id={id}
             title={title}
             items={items}
@@ -93,6 +96,7 @@ export const ProductsFilter:FC<ProductsFilterProps> = ({categories,brands}) => {
           />
         ))}
       </div>
+      {/* <TestDropdown  /> */}
     </div>
   );
 };

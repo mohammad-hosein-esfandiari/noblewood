@@ -170,3 +170,34 @@ html {
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
+
+.group-1:hover nav{
+  opacity: 1;
+  visibility: visible;
+  display: block;
+}
+.group-1:hover .base-arrow {
+  transform: rotate(0deg) translateY(-50%);
+  
+}
+.sub-group {
+  position: relative;
+}
+.sub_ul {
+
+  margin-top: 0;
+  margin-left: 0;
+  background-color: white;
+  border-radius: 0.75rem; /* rounded-xl */
+  opacity: 0;
+  visibility: hidden;
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.2s ease-in-out;
+}
+.sub-group input:checked ~ .sub_ul {
+  opacity: 1 !important;
+  visibility: visible !important;
+  max-height: 1000px  !important;
+  transition: all 0.2s ease-in-out;
+}
