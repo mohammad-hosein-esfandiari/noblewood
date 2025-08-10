@@ -82,6 +82,18 @@ export const FilterBox: FC<SelectBoxProps> = ({
     };
   }, []);
 
+  useEffect(() => {
+    // اگر کوئری تغییر کرد، دسته‌بندی انتخاب شده رو به مقدار کوئری تنظیم کن
+    if (query && query !== "all") {   
+      const selectedItem = items.find((item) => item.id === query);
+      if (selectedItem) {
+        setSelectedCategory(selectedItem.name);
+      }
+    } else {
+      setSelectedCategory("Select" + " " + title);
+    }
+  }, [query, items, title]);
+
 
   return (
     <div key={id + "_" + title} className=" text-gray-700 text-sm">
@@ -95,7 +107,7 @@ export const FilterBox: FC<SelectBoxProps> = ({
         <button
           type="button"
           className="w-full relative p-4 border border-gray-300 rounded-xl bg-white text-gray-700 shadow-sm flex justify-between items-center focus:outline-none">
-          <span className="font-"> {selectedCategory} </span>
+          <span data-value={query} className="font-"> {selectedCategory} </span>
           <ChevronDown className="absolute base-arrow rotate-[-90deg]  transition-all right-4 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none w-5 h-5" />
         </button>
         <nav

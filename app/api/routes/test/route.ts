@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { wocommerceAPI } from "../../config/woocommerce";
 import type { RawProduct } from "@/types/product";
 
-const ALLOWED_PARAMS = ["page", "orderby", "min_price", "max_price", "category" , "brand"];
+const ALLOWED_PARAMS = ["page", "orderby", "min_price", "max_price", "category" , "brand" , "sku", "search"];
 
 function extractSelectedFields(products: RawProduct[]) {
   return products.map((product) => ({

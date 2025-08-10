@@ -26,7 +26,6 @@ export const ProductsFilter: FC<ProductsFilterProps> = ({
     priceRange: "all",
   });
 
-  console.log(categories);
 
   const handleFilterChange = (key: string, value: string) => {
     setQueries((prev) => ({
@@ -47,6 +46,7 @@ export const ProductsFilter: FC<ProductsFilterProps> = ({
     (value) => value !== "all"
   );
 
+  console.log(queries)
 
   const filters = [
     {
@@ -73,7 +73,7 @@ export const ProductsFilter: FC<ProductsFilterProps> = ({
   ];
 
   return (
-    <div className="bg-white rounded-2xl shadow-xl p-8 mb-12 border border-gray-100">
+    <div className="bg-white rounded-2xl shadow-xl p-6 lg:p-8 mb-12 border border-gray-100">
       <Head
         isOpen={isOpen}
         clearFilters={clearFilters}

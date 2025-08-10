@@ -20,7 +20,7 @@ export const Products: FC<ProductsProp> = ({
 
 
   return (
-    <div className="py-32 px-4 sm:px-6 lg:px-8 bg-gray-50 relative overflow-hidden">
+    <div className="py-32 px-4 sm:px-6 lg:px-8 bg-gray-50 relative ">
       <BackgroundElements />
       <div className="max-w-7xl mx-auto relative z-10">
         <Title />
