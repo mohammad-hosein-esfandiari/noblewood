@@ -58,6 +58,7 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
             imageLoaded ? "opacity-100" : "opacity-0"
           }`}>
           <Image
+            priority
             src={product.images[0].src}
             alt={product.images[0].name}
             width={400}
@@ -69,9 +70,8 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
 
         {/* Loading Skeleton */}
         {!imageLoaded && (
-          <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-pulse"></div>
+          <div style={{fontFamily:"fantasy"}} className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-300 animate-pulse "></div>
         )}
-        
 
         {/* Stock Badge */}
         <div className="absolute top-4 left-4">
@@ -144,14 +144,13 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
         <div className="p-6 bg-white w-full relative z-10 h-[205px] ">
           <div className="flex items-center justify-between mb-3">
             <div className="flex gap-1 items-center">
-
-            {product.brands.map((brand) => (
-              <span
-                key={brand.id}
-                className="text-[10px] font-medium text-amber-600 bg-amber-50 px-2 py-1 rounded-full">
-                {brand.name} 
-              </span>
-            ))}
+              {product.brands.map((brand) => (
+                <span
+                  key={brand.id}
+                  className="text-[10px] font-medium text-amber-600 bg-amber-50 px-2 py-1 rounded-full">
+                  {brand.name}
+                </span>
+              ))}
             </div>
             <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
               {product.sku}
@@ -183,7 +182,11 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
                   </span>
                 ) : null}
               </div>
-            ) : (<span className="font-bold text-sm text-gray-400 bg-gray-200 py-1 px-3 rounded-full">Out Of Stock</span>)}
+            ) : (
+              <span className="font-bold text-sm text-gray-400 bg-gray-200 py-1 px-3 rounded-full">
+                Out Of Stock
+              </span>
+            )}
 
             <Link
               href={`/product/${product.slug}`}

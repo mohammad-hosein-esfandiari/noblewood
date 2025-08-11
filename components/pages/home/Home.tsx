@@ -2,6 +2,7 @@ import React from 'react'
 import HeroSection from './components/HeroSection/HeroSection'
 import { Products } from './components/Products/Products'
 import { Category } from '@/types/category';
+import { useProductStore } from '@/store/products';
 
 function sortCategories(categoriesArray:Category[]) {
   return categoriesArray.sort((a, b) => {
@@ -39,11 +40,17 @@ export const Home = async () => {
     });
     const products = await res3.json()
 
+
+    const state = useProductStore.getState();
+    state.setProducts(products.result);
+
+    console.log(state.products)
+
    
   return (
     <div>
         <HeroSection/>
-        <Products categories={sortedCategories} brands={brands.result} products={products.result}/>
+        <Products categories={sortedCategories} brands={brands.result} />
     </div>
   )
 }

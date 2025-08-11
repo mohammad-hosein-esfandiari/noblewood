@@ -1,3 +1,4 @@
+import { FilterQueries } from "@/store/products";
 import { Brand } from "@/types/brands";
 import { Category } from "@/types/category";
 import { ChevronDown } from "lucide-react";
@@ -13,8 +14,8 @@ interface itemsProps {
 interface SelectBoxProps {
   items: Category[] | Brand[] | any[];
   title: string;
-  id: string;
-  callback: (key: string, value: string) => void;
+  id: keyof FilterQueries;
+  callback: (key: keyof FilterQueries, value: string) => void;
   query: string;
 }
 
@@ -32,7 +33,7 @@ export const FilterBox: FC<SelectBoxProps> = ({
   const [openUp, setOpenUp] = React.useState(false);
   const containerRef = React.useRef<HTMLDivElement>(null);
 
-  const handleFilterChange = (key: string, value: string) => {
+  const handleFilterChange = (key: keyof FilterQueries , value: string) => {
     callback(key, value);
   };
 
@@ -54,7 +55,7 @@ export const FilterBox: FC<SelectBoxProps> = ({
   const handleCategoryClick = (
     event: React.MouseEvent<HTMLElement>,
     category: string ,
-    queryValue: string = "all"
+    queryValue: string = ""
   ) => {
     event?.stopPropagation(); // جلوگیری از بسته شدن دراپ‌داون هنگام کلیک روی گزینه
     setSelectedCategory(category);
@@ -84,7 +85,7 @@ export const FilterBox: FC<SelectBoxProps> = ({
 
   useEffect(() => {
     // اگر کوئری تغییر کرد، دسته‌بندی انتخاب شده رو به مقدار کوئری تنظیم کن
-    if (query && query !== "all") {   
+    if (query && query !== "") {   
       const selectedItem = items.find((item) => item.id === query);
       if (selectedItem) {
         setSelectedCategory(selectedItem.name);
@@ -115,7 +116,7 @@ export const FilterBox: FC<SelectBoxProps> = ({
             openUp ? "bottom-full " : "top-full "
           }`}>
           <ul className="relative w-full bg-white border border-gray-300 rounded-xl  ">
-            <li onClick={(e)=> handleCategoryClick(e, `All ${title}` ,"all")} className="hover:text-amber-800 hover:font-bold px-4 py-3 cursor-pointer">
+            <li onClick={(e)=> handleCategoryClick(e, `All ${title}` ,"")} className="hover:text-amber-800 hover:font-bold px-4 py-3 cursor-pointer">
               All {title}
             </li>
 

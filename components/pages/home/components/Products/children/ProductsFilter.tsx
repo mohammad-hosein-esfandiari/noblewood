@@ -5,6 +5,8 @@ import { Head } from "./ProductsFilter/Head";
 import { FilterBox } from "./ProductsFilter/FilterBox";
 import { Category } from "@/types/category";
 import { Brand } from "@/types/brands";
+import { useProductStore } from "@/store/products";
+import { set } from "date-fns";
 
 export interface FilterQueries {
   [key: string]: string;
@@ -20,33 +22,14 @@ export const ProductsFilter: FC<ProductsFilterProps> = ({
   brands,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [queries, setQueries] = useState<FilterQueries>({
-    category: "all",
-    woodType: "all",
-    priceRange: "all",
+  const { queries, setQuery, resetQueries, products } = useProductStore();
+
+  const hasActiveFilters = Object.values(queries).some((value) => {
+    return value !== "";
   });
-
-
-  const handleFilterChange = (key: string, value: string) => {
-    setQueries((prev) => ({
-      ...prev,
-      [key]: value,
-    }));
-  };
-
-  const clearFilters = () => {
-    const cleared = Object.fromEntries(
-      Object.keys(queries).map((key) => [key, "all"])
-    ) as FilterQueries;
-
-    setQueries(cleared);
-  };
-
-  const hasActiveFilters = Object.values(queries).some(
-    (value) => value !== "all"
-  );
-
-  console.log(queries)
+// console.log(Object.values(queries));
+//   console.log(queries);
+//   console.log(products);
 
   const filters = [
     {
@@ -76,7 +59,7 @@ export const ProductsFilter: FC<ProductsFilterProps> = ({
     <div className="bg-white rounded-2xl shadow-xl p-6 lg:p-8 mb-12 border border-gray-100">
       <Head
         isOpen={isOpen}
-        clearFilters={clearFilters}
+        clearFilters={resetQueries}
         hasFilter={hasActiveFilters}
         setIsOpen={setIsOpen}
       />
@@ -85,16 +68,23 @@ export const ProductsFilter: FC<ProductsFilterProps> = ({
         className={`grid grid-cols-1 md:grid-cols-3 gap-6 transition-all duration-500 ${
           isOpen ? "block" : "hidden md:grid"
         }`}>
-        {filters.map(({ id, title, items }) => (
+        {/* {filters.map(({ id, title, items }) => (
           <FilterBox
-            key={id+"_box"}
+            key={id + "_box"}
             id={id}
             title={title}
             items={items}
-            query={queries[id]}
-            callback={handleFilterChange}
+            query={queries.category}
+            callback={setQuery}
           />
-        ))}
+        ))} */}
+        <FilterBox
+          id="category"
+          title="Categories"
+          items={categories}
+          query={queries.category}
+          callback={setQuery}
+        />
       </div>
       {/* <TestDropdown  /> */}
     </div>

@@ -1,3 +1,4 @@
+"use client"
 import React, { FC } from "react";
 import { BackgroundElements } from "./children/BackgroundElements";
 import { Title } from "./children/Title";
@@ -5,19 +6,21 @@ import { ProductsFilter } from "./children/ProductsFilter";
 import { Category } from "@/types/category";
 import { Brand } from "@/types/brands";
 import ProductCard from "./children/ProductCard";
+import { useProductStore } from "@/store/products";
 
 interface ProductsProp {
   categories: Category[];
   brands: Brand[];
-  products: any[];
+
 }
 
 export const Products: FC<ProductsProp> = ({
   categories,
   brands,
-  products,
+ 
 }) => {
 
+  const products = useProductStore(state => state.products);
 
   return (
     <div className="py-32 px-4 sm:px-6 lg:px-8 bg-gray-50 relative ">

@@ -1,66 +1,53 @@
-import Modal from "@/components/global/Components/Modal/Modal";
-import { RawProduct } from "@/types/product";
-import { Search } from "lucide-react";
+import { useProductStore } from "@/store/products";
+import { Search, X } from "lucide-react";
 import React, { useState } from "react";
 
 export default function SearchBox() {
-  const [isModalOpen, setIsModalOpen] = React.useState(false);
-  const [query, setQuery] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  async function handleSearch(e: React.FormEvent) {
+  const {queries, setQuery ,resetQueries , loading} = useProductStore();
+  const [searchQuery, setSearchQuery] = useState(queries.search || "");
+  const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!query.trim()) return;
-
-    setLoading(true);
-    try {
-      const res = await fetch(
-        `/api/routes/products?search=${encodeURIComponent(query)}`
-      );
-      const data = await res.json();
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching products:", error);
-    }
-    setLoading(false);
+    setQuery("search", searchQuery.trim() || "");
   }
+
+
+
+
+
+
   return (
-    <div className=" shrink-0 sm:items-end sm:justify-end flex items-center justify-center">
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <div className="p-6 md:w-[500px] w-full max-w-full bg-white rounded-xl  shadow-lg">
-          <h2 className="text-xl font-semibold mb-4">Search Products</h2>
-          <form onSubmit={handleSearch}>
-            <input
-              type="text"
-              className="py-6 px-5 border rounded-xl focus:ring-2 
-            focus:ring-amber-500 focus:border-amber-500 bg-white/50 
-            backdrop-blur-sm outline-none transition-all duration-300 w-full  mb-6"
-              placeholder="Search by Title or SKU..."
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              autoFocus
-            />
-            <div className="flex item-center  mb-4 gap-4">
-              <button
-                className="group border-2 border-gray-200 text-amber-800 px-5 py-2 rounded-xl font-bold text-lg hover:bg-amber-300 hover:text-amber-900 transition-all duration-500 backdrop-blur-sm bg-white/5  flex-1"
-                onClick={() => setIsModalOpen(false)}>
-                Cancel
-              </button>
-              <button
-                type="submit"
-                className="group flex-1 relative bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 text-white px-5 py-2 rounded-xl font-bold text-lg hover:from-amber-400 hover:via-amber-500 hover:to-amber-600 transform  transition-all duration-500 shadow-2xl hover:shadow-amber-500/25 overflow-hidden"
-                disabled={loading}>
-                {loading ? "Searching..." : "Search"}
-              </button>
-            </div>
-          </form>
+    <div className="shrink-0 sm:items-end sm:justify-end flex items-center justify-center">
+      <form onSubmit={handleSearch} className="rounded-xl flex items-center min-w-[200px] gap-2  px-2 py-1">
+        <div className="relative peer">
+
+        <input
+          type="text"
+          className="border border-gray-300 h-12 peer px-4 pr-8 text-sm placeholder:text-[14px] placeholder:text-gray-400 rounded-xl focus:outline-amber-300 outline-amber-300  outline-[0.5px] transition-all duration-300 w-full"
+          placeholder="Search by Title or SKU..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          
+        />
+            {queries.search && (
+          <button
+            type="button"
+            onClick={()=>resetQueries("search")}
+            className="text-gray-500  absolute top-1/2 -translate-y-1/2 right-4 hover:text-gray-700 transition "
+            aria-label="Clear search input"
+            >
+            <X className="w-4 h-4" />
+          </button>
+          )}
         </div>
-      </Modal>
-      <div
-        className="w-fit cursor-pointer hover:scale-[1.05] transition-transform duration-300 bg-slate-100 p-2 rounded-xl"
-        onClick={() => setIsModalOpen(true)}>
-        <Search className="text-gray-500 w-5 h-5" />
-      </div>
+        <button
+          type="submit"
+          disabled={loading}
+          className="group cursor-pointer h-12 w-12 disabled:opacity-[0.5]  border-2 border-amber-300   bg-amber-300    backdrop-blur-sm bg-white/5 hover:shadow-xl transition-transform duration-300 flex items-center justify-center rounded-xl "
+          aria-label="Search"
+        >
+          <Search className="w-5 h-5  text-amber-800" />
+        </button>
+      </form>
     </div>
   );
 }
