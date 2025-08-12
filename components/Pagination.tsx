@@ -7,25 +7,22 @@ interface PaginationProps {
 }
 
 export default function Pagination({ currentPage, totalPages, onPageChange }: PaginationProps) {
-  const pages = [];
+  if (totalPages <= 1) return null;
+
   const maxVisiblePages = 5;
-  
+
   let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
   let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
-  
+
   if (endPage - startPage + 1 < maxVisiblePages) {
     startPage = Math.max(1, endPage - maxVisiblePages + 1);
   }
 
-  for (let i = startPage; i <= endPage; i++) {
-    pages.push(i);
-  }
-
-  if (totalPages <= 1) return null;
+  const pages = [];
+  for (let i = startPage; i <= endPage; i++) pages.push(i);
 
   return (
     <div className="flex justify-center items-center space-x-2 mt-12 animate-fade-in-up">
-      {/* Previous Button */}
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
@@ -35,7 +32,6 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
         <span>Previous</span>
       </button>
 
-      {/* First page */}
       {startPage > 1 && (
         <>
           <button
@@ -44,13 +40,10 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
           >
             1
           </button>
-          {startPage > 2 && (
-            <span className="px-2 py-3 text-sm text-gray-400">...</span>
-          )}
+          {startPage > 2 && <span className="px-2 py-3 text-sm text-gray-400">...</span>}
         </>
       )}
 
-      {/* Page numbers */}
       {pages.map((page) => (
         <button
           key={page}
@@ -65,12 +58,9 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
         </button>
       ))}
 
-      {/* Last page */}
       {endPage < totalPages && (
         <>
-          {endPage < totalPages - 1 && (
-            <span className="px-2 py-3 text-sm text-gray-400">...</span>
-          )}
+          {endPage < totalPages - 1 && <span className="px-2 py-3 text-sm text-gray-400">...</span>}
           <button
             onClick={() => onPageChange(totalPages)}
             className="px-4 py-3 text-sm font-medium text-gray-700 bg-white border-2 border-gray-200 rounded-xl hover:bg-amber-50 hover:border-amber-300 hover:text-amber-700 transition-all duration-300 hover:scale-105"
@@ -80,7 +70,6 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
         </>
       )}
 
-      {/* Next Button */}
       <button
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}

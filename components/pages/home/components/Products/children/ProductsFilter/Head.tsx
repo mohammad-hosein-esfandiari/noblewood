@@ -3,6 +3,7 @@ import { ChevronDown, Filter, X } from "lucide-react";
 import Modal from "@/components/global/Components/Modal/Modal";
 import { RawProduct } from "@/types/product";
 import SearchBox from "./SearchBox";
+import { useProductStore } from "@/store/products";
 
 interface HeadProps {
   isOpen: boolean;
@@ -17,6 +18,7 @@ export const Head: FC<HeadProps> = ({
   clearFilters,
   setIsOpen,
 }) => {
+   const {resetQueries } = useProductStore();
   return (
     <div className="flex items-center justify-between mb-6 gap-4 md:flex-row flex-col">
       <div className="flex items-center shrink-0 space-x-3">
@@ -35,7 +37,7 @@ export const Head: FC<HeadProps> = ({
         <div className="flex-1 flex md:justify-end items-center justify-center flex-wrap sm:flex-nowrap gap-4">
           {hasFilter && (
             <button
-              onClick={()=> clearFilters()}
+              onClick={()=> resetQueries()}
               className="flex  items-center space-x-2 text-sm text-red-600 hover:text-red-700 bg-red-50 hover:bg-red-100 px-4 py-2 rounded-xl transition-all duration-300 font-medium">
               <X className="w-4 h-4" />
               <span className="whitespace-nowrap">Clear All</span>

@@ -201,3 +201,15 @@ html {
   max-height: 1000px  !important;
   transition: all 0.2s ease-in-out;
 }
+
+/* برای مرورگرهای Webkit (Chrome, Safari, Edge جدید) */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* برای Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}

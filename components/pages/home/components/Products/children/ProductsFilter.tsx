@@ -7,6 +7,7 @@ import { Category } from "@/types/category";
 import { Brand } from "@/types/brands";
 import { useProductStore } from "@/store/products";
 import { set } from "date-fns";
+import { PriceFilter } from "./ProductsFilter/PriceFilter";
 
 export interface FilterQueries {
   [key: string]: string;
@@ -24,34 +25,19 @@ export const ProductsFilter: FC<ProductsFilterProps> = ({
   const [isOpen, setIsOpen] = useState(false);
   const { queries, setQuery, resetQueries, products } = useProductStore();
 
-  const hasActiveFilters = Object.values(queries).some((value) => {
-    return value !== "";
-  });
-// console.log(Object.values(queries));
-//   console.log(queries);
-//   console.log(products);
+  const hasActiveFilters = Object.entries(queries)
+  .filter(([key]) => key !== "page")
+  .some(([_, value]) => value !== "");
 
-  const filters = [
+
+  const stockItems = [
     {
-      id: "category",
-      title: "Categories",
-      items: categories,
+      id: "instock",
+      name: "In stock",
     },
     {
-      id: "woodType",
-      title: "Wood Types",
-      items: brands,
-    },
-    {
-      id: "priceRange",
-      title: "Price Range",
-      items: [
-        { id: "all", name: "All Prices", min: 0, max: Infinity },
-        { id: "under-200", name: "Under $200", min: 0, max: 200 },
-        { id: "200-500", name: "$200 - $500", min: 200, max: 500 },
-        { id: "500-1000", name: "$500 - $1,000", min: 500, max: 1000 },
-        { id: "over-1000", name: "Over $1,000", min: 1000, max: Infinity },
-      ],
+      id: "outofstock",
+      name: "Out of stock",
     },
   ];
 
@@ -65,7 +51,7 @@ export const ProductsFilter: FC<ProductsFilterProps> = ({
       />
 
       <div
-        className={`grid grid-cols-1 md:grid-cols-3 gap-6 transition-all duration-500 ${
+        className={`grid grid-cols-1 md:grid-cols-4 gap-6 transition-all duration-500 ${
           isOpen ? "block" : "hidden md:grid"
         }`}>
         {/* {filters.map(({ id, title, items }) => (
@@ -85,6 +71,21 @@ export const ProductsFilter: FC<ProductsFilterProps> = ({
           query={queries.category}
           callback={setQuery}
         />
+        <FilterBox
+          id="brand"
+          title="Brands"
+          items={brands}
+          query={queries.brand}
+          callback={setQuery}
+        />
+        <FilterBox
+          id="stock_status"
+          title="Stock"
+          items={stockItems}
+          query={queries.stock_status}
+          callback={setQuery}
+        />
+        <PriceFilter />
       </div>
       {/* <TestDropdown  /> */}
     </div>

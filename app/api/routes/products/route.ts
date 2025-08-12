@@ -11,6 +11,7 @@ const ALLOWED_PARAMS = [
   "brand",
   "sku",
   "search",
+  "stock_status"
 ];
 
 function extractSelectedFields(products: RawProduct[]) {
@@ -60,7 +61,7 @@ export async function GET(request: Request) {
     }
 
     // مقدار per_page همیشه ۹ (استاتیک) به ووکامرس ارسال میشه
-    params.per_page = "9";
+    params.per_page = "3";
 
     // درخواست به ووکامرس
     const response = await wocommerceAPI.get("products", { ...params });
