@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
-import { wocommerceAPI } from "../../config/woocommerce";
+
 import type { RawProduct } from "@/types/product";
+import { wocommerceAPI } from "@/app/api/config/woocommerce";
 
 const ALLOWED_PARAMS = [
   "page",
@@ -11,7 +12,8 @@ const ALLOWED_PARAMS = [
   "brand",
   "sku",
   "search",
-  "stock_status"
+  "stock_status",
+  "slug"
 ];
 
 function extractSelectedFields(products: RawProduct[]) {
@@ -72,11 +74,6 @@ export async function GET(request: Request) {
       status: "success",
       statusCode: 200,
       message: "Products fetched successfully",
-      result: homeProductsCardArray,
-      total_products: response.headers["x-wp-total"],
-      total_pages: response.headers["x-wp-totalpages"],
-      current_page: Number(params.page) || 1,
-      per_page: 9,
       default_data:response.data
     });
   } catch (error: any) {

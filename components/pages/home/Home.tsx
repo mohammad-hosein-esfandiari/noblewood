@@ -32,6 +32,7 @@ interface ProductsResponse {
   per_page: number;
   total_pages: number;
   total_products: number;
+  default_data:any[]
 }
 
 export const Home = async () => {
@@ -79,6 +80,8 @@ export const Home = async () => {
         total_pages: 1,
         total_products: 0,
       };
+
+      console.log(productsRes?.data?.default_data)
 
   // Collect errors from all fetches
   const errors = [];
