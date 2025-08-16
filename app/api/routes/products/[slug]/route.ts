@@ -33,7 +33,7 @@ export async function GET(
 ) {
   try {
     // دسترسی مستقیم به slug
-    const slug = context.params.slug;
+    const {slug} = await context.params;
 
     const response = await wocommerceAPI.get(`products?slug=${slug}`);
 
@@ -54,7 +54,7 @@ export async function GET(
       status: "success",
       statusCode: 200,
       message: "Product fetched successfully",
-      result: product,
+      result: product[0],
     });
   } catch (error: any) {
     console.error("WooCommerce error:", error.message);

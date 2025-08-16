@@ -18,7 +18,7 @@ export interface MobileMenuButtonProps extends HeaderProps {
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const pathname = usePathname();
-  const noHeaderRoutes: String[] = ["/login", "/signup", "/forgot-password"];
+  const noHeaderRoutes: String[] = ["/login", "/signup", "/forgot-password" , "/products"];
   const [isScrolled, setIsScrolled] = useState<boolean>(false);
 
   useEffect(() => {
@@ -41,8 +41,9 @@ export default function Header() {
 
     return () => window.removeEventListener("scroll", handleScroll);
   }, [pathname]);
+  console.log(pathname.split("/")[1])
 
-  if (noHeaderRoutes.includes(pathname)) {
+  if (noHeaderRoutes.includes("/"+pathname.split("/")[1])) {
     return <></>;
   }
 
