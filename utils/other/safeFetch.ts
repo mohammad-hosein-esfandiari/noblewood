@@ -7,7 +7,7 @@ interface SafeFetchOptions extends RequestInit {
 export async function safeFetch<T>(
   url: string,
   options?: SafeFetchOptions
-): Promise<{ ok: boolean; data: T | null }> {
+): Promise<{ ok: boolean; status: number; data: T | null }> {
   try {
     // گزینه‌های پیش‌فرض
     const fetchOptions: RequestInit = {
@@ -17,15 +17,16 @@ export async function safeFetch<T>(
 
     const res = await fetch(url, fetchOptions);
 
+
     if (!res.ok) {
       console.error(`❌ Fetch failed: ${url} Status: ${res.status}`);
-      return { ok: false, data: null };
+      return { ok: false, status: res.status, data: null };
     }
 
     const data: T = await res.json();
-    return { ok: true, data };
+    return { ok: true, status: res.status, data };
   } catch (err) {
     console.error(`❌ Network error: ${url}`, err);
-    return { ok: false, data: null };
+    return { ok: false, status: 0, data: null }; // 0 برای شبکه قطع شده
   }
 }
