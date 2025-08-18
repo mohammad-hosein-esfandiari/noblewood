@@ -24,6 +24,7 @@ function extractSelectedFields(products: RawProduct[]) {
     stock_status: product.stock_status,
     categories: product.categories,
     attributes: product.variation_attributes || [],
+    rating_count : product.rating_count 
   }));
 }
 

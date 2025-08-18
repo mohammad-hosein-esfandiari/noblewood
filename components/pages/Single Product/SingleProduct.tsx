@@ -9,9 +9,9 @@ interface ProductDataProps {
 
 export const SingleProduct: FC<ProductDataProps> = ({ productData }) => {
   return (
-    <div className=" pt-[80px] max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 ">
+    <div className=" pt-[80px] max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ">
       <div className="py-8 h-full space-y-4">
-        <BackButton />
+        <BackButton product={productData} />
         <ProductsDetails product={productData}/>
       </div>
     </div>

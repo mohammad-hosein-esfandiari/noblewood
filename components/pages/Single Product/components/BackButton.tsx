@@ -1,10 +1,16 @@
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import React from "react";
+import React, { FC } from "react";
+import { Category } from "./Product Details/children/ProductContent/children/Category";
+import { RawProduct } from "@/types/product";
 
-export const BackButton = () => {
+interface BackButtonProps {
+  product: RawProduct;
+}
+
+export const BackButton: FC<BackButtonProps> = ({ product }) => {
   return (
-    <div className="flex items-center justify-between gap-2 w-full">
+    <div className="flex items-center justify-between gap-4 w-full">
       {/* Back Button */}
       <Link
         href="/"
@@ -14,7 +20,7 @@ export const BackButton = () => {
         <span>Back to Shop</span>
       </Link>
 
-    
+      <Category categories={product.categories} brands={product.brands} />
     </div>
   );
 };

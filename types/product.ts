@@ -32,6 +32,11 @@ interface ProductVariationsData {
   variations: Variation[];
   attributes: Attribute[];
 }
+export interface Category {
+  id:number ;
+  name:string;
+  slug:string
+}
 export interface ProductCard {
   id: number;
   name: string;
@@ -52,6 +57,8 @@ export interface ProductCard {
   images: ProductImage[];
   stock_status: "outofstock" | "instock";
   attributes:ProductVariationsData 
+  categories :Category[];
+  rating_count : number
 }
 
 
