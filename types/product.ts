@@ -1,13 +1,44 @@
 import type {  CardBrands } from "./brands";
 import type { ProductImage } from "./image";
+interface Option {
+  label: string;
+  value: string;
+}
 
+// اینترفیس برای ویژگی‌ها (Attributes)
+interface Attribute {
+  title: string;
+  slug: string;
+  options: Option[];
+}
+
+// اینترفیس برای ویژگی‌های یک Variation
+interface VariationAttributes {
+  pa_wood_brand: string;
+  pa_wooden_bowls_size: string;
+}
+
+// اینترفیس برای هر Variation
+interface Variation {
+  id: number;
+  price: number;
+  stock: number;
+  image: string;
+  attributes: VariationAttributes;
+}
+
+// اینترفیس کلی داده‌ها
+interface ProductVariationsData {
+  variations: Variation[];
+  attributes: Attribute[];
+}
 export interface ProductCard {
   id: number;
   name: string;
   slug: string;
   date_created: string;
   date_modified: string;
-  type: string;
+  type: "simple" | "variable";
   status: string;
   regular_price: string;
   sale_price: string;
@@ -20,6 +51,7 @@ export interface ProductCard {
   stock_quantity: number | null;
   images: ProductImage[];
   stock_status: "outofstock" | "instock";
+  attributes:ProductVariationsData 
 }
 
 

@@ -1,4 +1,3 @@
-import { Logo } from "@/components/global/Header/components/Logo";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import React from "react";
@@ -15,7 +14,7 @@ export const BackButton = () => {
         <span>Back to Shop</span>
       </Link>
 
-      <Logo isScrolled/>
+    
     </div>
   );
 };
