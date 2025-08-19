@@ -21,7 +21,7 @@ export const ImageSlider: FC<ImageSliderProps> = ({ product }) => {
   const { images, isSliderNeeded } = useProductImages(product);
 
   return (
-    <div className="relative shrink-0 w-[380px] bg-gray-100">
+    <div className="relative shrink-0 w-[45%] bg-gray-100">
       {isSliderNeeded ? (
         <Swiper
           modules={[Pagination]}
@@ -36,6 +36,7 @@ export const ImageSlider: FC<ImageSliderProps> = ({ product }) => {
                 alt={product.name}
                 width={600}
                 height={600}
+                priority
                 className="w-full lg:h-full object-cover group-hover:scale-105 transition-transform duration-700"
               />
             </SwiperSlide>
@@ -46,6 +47,7 @@ export const ImageSlider: FC<ImageSliderProps> = ({ product }) => {
           src={product.images[0].src}
           alt={product.name}
           width={600}
+          priority
           height={600}
           className="w-full  lg:h-full object-cover group-hover:scale-105 transition-transform duration-700"
         />

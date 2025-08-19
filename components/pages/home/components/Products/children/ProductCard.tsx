@@ -7,6 +7,7 @@ import { useCart } from "@/contexts/CartContext";
 import { useState } from "react";
 import type { ProductCard } from "@/types/product";
 import { Products } from "../Products";
+import { formatPrice } from "@/utils/global/format-price";
 
 interface ProductCardProps {
   product: ProductCard;
@@ -38,13 +39,7 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
   const [isLiked, setIsLiked] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
 
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
-      minimumFractionDigits: 0,
-    }).format(price);
-  };
+
 
   // console.log(product)
   return (

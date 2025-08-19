@@ -9,7 +9,7 @@ export interface ProductsDetailProps {
 }
 
 export const ProductsDetails: FC<ProductsDetailProps> = ({ product }) => {
-  console.log(product);
+  console.log(product.attributes);
   return (
     <div className="bg-white rounded-3xl shadow-2xl overflow-hidden animate-fade-in-up">
       <div className="flex">

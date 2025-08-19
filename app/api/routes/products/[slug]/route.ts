@@ -24,7 +24,11 @@ function extractSelectedFields(products: RawProduct[]) {
     stock_status: product.stock_status,
     categories: product.categories,
     attributes: product.variation_attributes || [],
-    rating_count : product.rating_count 
+    rating_count : product.rating_count ,
+    short_description:product.short_description,
+    description:product.description,
+    dimensions :product.dimensions,
+    weight:product.weight
   }));
 }
 
