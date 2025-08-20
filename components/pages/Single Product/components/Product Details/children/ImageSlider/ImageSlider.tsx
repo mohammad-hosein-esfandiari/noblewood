@@ -21,7 +21,7 @@ export const ImageSlider: FC<ImageSliderProps> = ({ product }) => {
   const { images, isSliderNeeded } = useProductImages(product);
 
   return (
-    <div className="relative shrink-0 w-[45%] bg-gray-100">
+    <div className="relative shrink-0 w-[35%] ">
       {isSliderNeeded ? (
         <Swiper
           modules={[Pagination]}

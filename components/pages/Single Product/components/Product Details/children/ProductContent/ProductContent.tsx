@@ -21,6 +21,7 @@ export const ProductContent: FC<ProductsDetailProps> = ({ product }) => {
     width: product.dimensions.width,
   });
   const [weight, setWeight] = useState<string>(product.weight);
+  const [price , setPrice] = useState<string>("")
   const default_price: DefaultPriceProps = {
     regular_price: product.regular_price,
     sale_price: product.sale_price,
@@ -36,6 +37,9 @@ export const ProductContent: FC<ProductsDetailProps> = ({ product }) => {
         price={default_price}
         type={product.type}
         stockStatus={product.stock_status}
+        variotionsData={product.attributes}
+        priceState={price}
+        setPriceState={setPrice}
       />
       <ShortDescription description={product.short_description} />
       <MetaData

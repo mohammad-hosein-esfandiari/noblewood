@@ -73,7 +73,7 @@ export const Variables: FC<VariablesProps> = ({
       setWeight(selectedVariations[0].weight);
     }
 
-    console.log("Matched variations: ", selectedVariations[0]);
+    // console.log("Matched variations: ", selectedVariations[0]);
   };
 
   // هندل حذف همه
@@ -106,8 +106,8 @@ export const Variables: FC<VariablesProps> = ({
               <div >
                 {Object.entries(selectedAttrs)
                   .map(([slug, value]) => value)
-                  .map((val)=>(
-                    <span className="bg-amber-200 py-1 px-3 font-bold mr-1 rounded-2xl">{val}</span>
+                  .map((val,index)=>(
+                    <span key={val+index} className="bg-amber-200 py-1 px-3 font-bold mr-1 rounded-2xl">{val}</span>
                   ))}
               </div>
       
