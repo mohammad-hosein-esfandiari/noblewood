@@ -12,8 +12,7 @@ interface PriceProps {
   price: DefaultPriceProps;
   stockStatus: StockStatusType;
   variotionsData: ProductVariationsData;
-  priceState:string,
-  setPriceState:React.Dispatch<React.SetStateAction<string>>
+  priceState: DefaultPriceProps;
 }
 
 export const Price: FC<PriceProps> = ({
@@ -22,10 +21,10 @@ export const Price: FC<PriceProps> = ({
   stockStatus,
   variotionsData,
   priceState,
-  setPriceState
 }) => {
   console.log(variotionsData);
-  function getPriceRange(variations) {
+
+  function getPriceRange(variations: Variation[]) {
     const prices = variations
       .map((v) => v.sale_price ?? v.regular_price) // اگه سیل پرایس داشت همونو می‌گیره، وگرنه رگولار
       .filter((p) => p !== null)
@@ -72,15 +71,30 @@ export const Price: FC<PriceProps> = ({
         </div>
       );
     } else if (type == "variable") {
-      return <div className="flex gap-4 items-center"> {priceState ?           <span className="text-3xl font-bold bg-gradient-to-r flex gap-2 items-center from-amber-600 to-amber-800 bg-clip-text text-transparent">
-        <span>
-          {formatPrice(
-            Number(
-              priceState
-            )
+      return (
+        <div className="flex gap-4 items-center">
+          {priceState.sale_price || priceState.regular_price ? (
+            <>
+              <span className="text-3xl font-bold bg-gradient-to-r flex gap-2 items-center from-amber-600 to-amber-800 bg-clip-text text-transparent">
+                <span>
+                  {formatPrice(
+                    Number(
+                      priceState.sale_price ? priceState.sale_price : priceState.regular_price
+                    )
+                  )}
+                </span>
+              </span>
+              {priceState.sale_price ? (
+                <span className="text-[14px] text-gray-500 font-normal  line-through">
+                  {formatPrice(Number(priceState.regular_price))}
+                </span>
+              ) : null}
+            </>
+          ) : (
+            <DefaultPriceRange />
           )}
-        </span>
-      </span> : <DefaultPriceRange/>} </div>;
+        </div>
+      );
     }
   };
   return (

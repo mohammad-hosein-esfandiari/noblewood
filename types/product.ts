@@ -77,6 +77,7 @@ export interface ProductCard {
   short_description: string;
   description: string;
   weight: string;
+  meta_data:VariationAttributes[]
 }
 
 export interface RawProduct extends ProductCard {

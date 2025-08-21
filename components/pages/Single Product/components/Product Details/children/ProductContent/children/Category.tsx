@@ -9,12 +9,8 @@ interface CategoryProps {
 }
 
 export const Category: FC<CategoryProps> = ({ brands, categories }) => {
+console.log(categories.forEach((item)=>console.log(item)))
 
- function decodeHTMLEntities(text: string) {
-    const txt = document.createElement("textarea");
-    txt.innerHTML = text;
-    return txt.value;
-  }
   
   return (
     <div className="">

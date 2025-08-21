@@ -28,7 +28,8 @@ function extractSelectedFields(products: RawProduct[]) {
     short_description:product.short_description,
     description:product.description,
     dimensions :product.dimensions,
-    weight:product.weight
+    weight:product.weight,
+    meta_data:product.meta_data
   }));
 }
 

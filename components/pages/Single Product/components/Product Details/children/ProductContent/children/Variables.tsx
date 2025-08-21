@@ -9,11 +9,13 @@ import {
   RawProduct,
 } from "@/types/product";
 import React, { FC, useState } from "react";
+import { DefaultPriceProps } from "../ProductContent";
 interface VariablesProps {
   setDimenitionsFunc: React.Dispatch<React.SetStateAction<DimensionsType>>;
   setWeight: React.Dispatch<React.SetStateAction<string>>;
   data: ProductVariationsData;
   product: RawProduct;
+  setPrice: React.Dispatch<React.SetStateAction<DefaultPriceProps>>;
 }
 
 export const Variables: FC<VariablesProps> = ({
@@ -21,6 +23,7 @@ export const Variables: FC<VariablesProps> = ({
   setDimenitionsFunc,
   setWeight,
   product,
+  setPrice
 }) => {
   const { attributes, variations } = data;
   const [selectedAttrs, setSelectedAttrs] = useState<{ [key: string]: string }>(
@@ -67,10 +70,15 @@ export const Variables: FC<VariablesProps> = ({
       Object.entries(updated).every(([s, v]) => variation.attributes[s] === v)
     );
 
+   
     // 4️⃣ خارج از setState، update کردن dimensions و weight
     if (selectedVariations[0]) {
       setDimenitionsFunc(selectedVariations[0].dimensions);
       setWeight(selectedVariations[0].weight);
+      setPrice({
+        regular_price: selectedVariations[0].regular_price?.toString() ?? "",
+        sale_price: selectedVariations[0].sale_price?.toString() ?? "",
+      });
     }
 
     // console.log("Matched variations: ", selectedVariations[0]);
@@ -97,7 +105,7 @@ export const Variables: FC<VariablesProps> = ({
   };
 
   return (
-    <div className="p-4 border rounded-2xl shadow-sm bg-white space-y-4">
+    <div className="p-4 border rounded-2xl shadow-sm bg-white space-y-4 mb-8">
       {/* هدر */}
       <div className="flex justify-between items-center">
         <div className="text-[12px] text-gray-600">

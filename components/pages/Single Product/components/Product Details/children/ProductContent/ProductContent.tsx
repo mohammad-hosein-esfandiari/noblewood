@@ -8,6 +8,8 @@ import { ShortDescription } from "./children/ShortDescription";
 import { MetaData } from "./children/MetaData";
 import { Variables } from "./children/Variables";
 import { DimensionsType } from "@/types/product";
+import { Features } from "./children/Features";
+import { Quantity } from "./children/Quantity";
 
 export interface DefaultPriceProps {
   regular_price: string;
@@ -21,11 +23,20 @@ export const ProductContent: FC<ProductsDetailProps> = ({ product }) => {
     width: product.dimensions.width,
   });
   const [weight, setWeight] = useState<string>(product.weight);
-  const [price , setPrice] = useState<string>("")
+  const [price , setPrice] = useState<DefaultPriceProps>({
+    regular_price: "",
+    sale_price: "",
+  })
+
+  const [quantity, setQuantity] = useState<number>(1);
+
+
   const default_price: DefaultPriceProps = {
     regular_price: product.regular_price,
     sale_price: product.sale_price,
   };
+
+
   return (
     <div className="p-8 flex-1">
       <Title title={product.name} sku={product.sku} />
@@ -39,7 +50,6 @@ export const ProductContent: FC<ProductsDetailProps> = ({ product }) => {
         stockStatus={product.stock_status}
         variotionsData={product.attributes}
         priceState={price}
-        setPriceState={setPrice}
       />
       <ShortDescription description={product.short_description} />
       <MetaData
@@ -53,8 +63,11 @@ export const ProductContent: FC<ProductsDetailProps> = ({ product }) => {
           setWeight={setWeight}
           data={product.attributes}
           setDimenitionsFunc={setDimenitions}
+          setPrice={setPrice}
         />
       )}
+      <Features/>
+      <Quantity quantity={quantity} setQuantity={setQuantity}/>
     </div>
   );
 };
