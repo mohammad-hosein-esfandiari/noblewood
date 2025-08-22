@@ -22,7 +22,7 @@ export const Price: FC<PriceProps> = ({
   variotionsData,
   priceState,
 }) => {
-  console.log(variotionsData);
+
 
   function getPriceRange(variations: Variation[]) {
     const prices = variations

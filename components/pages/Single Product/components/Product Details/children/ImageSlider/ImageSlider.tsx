@@ -2,11 +2,12 @@
 import { RawProduct } from "@/types/product";
 import { Star } from "lucide-react";
 import Image from "next/image";
-import React, { FC } from "react";
+import React, { FC, useEffect, useRef } from "react";
 import { useProductImages } from "../../../../hooks/useProductImage";
 
 // Swiper imports
 import { Swiper, SwiperSlide } from "swiper/react";
+import type { SwiperRef } from "swiper/react";
 import "./imageSlider.css";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -15,19 +16,38 @@ import { Pagination } from "swiper/modules";
 
 interface ImageSliderProps {
   product: RawProduct;
+  currentImageIndex: number;
+  setCurrentImageIndex: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export const ImageSlider: FC<ImageSliderProps> = ({ product }) => {
+export const ImageSlider: FC<ImageSliderProps> = ({ 
+  product, 
+  currentImageIndex, 
+  setCurrentImageIndex 
+}) => {
   const { images, isSliderNeeded } = useProductImages(product);
+  const swiperRef = useRef<SwiperRef>(null);
+
+  // Navigate to specific image when currentImageIndex changes
+  useEffect(() => {
+    if (swiperRef.current?.swiper && isSliderNeeded) {
+      swiperRef.current.swiper.slideTo(currentImageIndex);
+    }
+  }, [currentImageIndex, isSliderNeeded]);
+
+  const handleSlideChange = (swiper: any) => {
+    setCurrentImageIndex(swiper.activeIndex);
+  };
 
   return (
-    <div className="relative shrink-0 w-[35%] ">
+    <div className="relative shrink-0 w-[45%] ">
       {isSliderNeeded ? (
         <Swiper
+          ref={swiperRef}
           modules={[Pagination]}
           pagination={{ clickable: true }}
           loop
-          
+          onSlideChange={handleSlideChange}
           className="w-full h-full">
           {images.map((img, idx) => (
             <SwiperSlide key={idx} className="h-full w-full select-none">

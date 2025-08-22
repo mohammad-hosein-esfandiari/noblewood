@@ -9,7 +9,7 @@ interface CategoryProps {
 }
 
 export const Category: FC<CategoryProps> = ({ brands, categories }) => {
-console.log(categories.forEach((item)=>console.log(item)))
+
 
   
   return (

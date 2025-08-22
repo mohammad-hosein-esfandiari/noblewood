@@ -16,6 +16,8 @@ interface VariablesProps {
   data: ProductVariationsData;
   product: RawProduct;
   setPrice: React.Dispatch<React.SetStateAction<DefaultPriceProps>>;
+  setCurrentImageIndex: React.Dispatch<React.SetStateAction<number>>;
+  setSelectedVariationId: React.Dispatch<React.SetStateAction<number | null>>;
 }
 
 export const Variables: FC<VariablesProps> = ({
@@ -23,13 +25,15 @@ export const Variables: FC<VariablesProps> = ({
   setDimenitionsFunc,
   setWeight,
   product,
-  setPrice
+  setPrice,
+  setCurrentImageIndex,
+  setSelectedVariationId
 }) => {
   const { attributes, variations } = data;
   const [selectedAttrs, setSelectedAttrs] = useState<{ [key: string]: string }>(
     {}
   );
-
+  
   const handleSelect = (slug: string, value: string) => {
     // 1️⃣ محاسبه انتخاب‌های جدید
     let updated: VariationAttributes = { ...selectedAttrs, [slug]: value };
@@ -79,6 +83,17 @@ export const Variables: FC<VariablesProps> = ({
         regular_price: selectedVariations[0].regular_price?.toString() ?? "",
         sale_price: selectedVariations[0].sale_price?.toString() ?? "",
       });
+
+      // 5️⃣ Navigate to the corresponding variation image
+      if (selectedVariations[0].image) {
+        // Find the index of this variation image in the images array
+        // The first image is the main product image, so variation images start from index 1
+        const variationImageIndex = variations.findIndex(v => v.id === selectedVariations[0].id) + 1;
+        setCurrentImageIndex(variationImageIndex);
+      }
+
+      // 6️⃣ Set the selected variation ID for ActionButtons
+      setSelectedVariationId(selectedVariations[0].id);
     }
 
     // console.log("Matched variations: ", selectedVariations[0]);
@@ -89,6 +104,10 @@ export const Variables: FC<VariablesProps> = ({
     setSelectedAttrs({});
     setDimenitionsFunc(product.dimensions);
     setWeight(product.weight);
+    // Reset to main product image
+    setCurrentImageIndex(0);
+    // Reset selected variation ID
+    setSelectedVariationId(null);
   };
 
   // تابع چک کردن اینکه یک option قابل انتخاب هست یا نه
@@ -151,7 +170,7 @@ export const Variables: FC<VariablesProps> = ({
                     selectedAttrs[attr.slug] === opt.value
                       ? "bg-amber-500 text-white font-semibold border-amber-600"
                       : isAvailable
-                      ? "bg-gray-100 hover:bg-gray-200 border-gray-300"
+                      ? "bg-amber-50 hover:bg-amber-200 border-amber-300"
                       : "bg-gray-200 text-gray-400 border-gray-300 cursor-not-allowed"
                   }`}>
                   {opt.label}
