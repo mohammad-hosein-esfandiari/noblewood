@@ -6,6 +6,9 @@ import { MetaData, useProductStore } from "@/store/products";
 import { safeFetch } from "@/utils/other/safeFetch";
 import { Brand } from "@/types/brands";
 import ErrorToast from "@/components/global/Components/other/ErrorToast";
+import { About } from "./components/About/About";
+import { Contact } from "./components/Contact/Contact";
+import { Footer } from "@/components/global/Footer/Footer";
 
 // Sort categories with custom order:
 // "others" always last, "sets" one before last,
@@ -108,6 +111,10 @@ export const Home = async () => {
         productsMeta={productsMeta}
         products={products}
       />
+
+      <About/>
+      <Contact/>
+      <Footer/>
     </div>
   );
 };

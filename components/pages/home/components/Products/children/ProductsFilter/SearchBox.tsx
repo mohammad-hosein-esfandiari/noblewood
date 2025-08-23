@@ -19,7 +19,7 @@ export default function SearchBox() {
     <div className="shrink-0 sm:items-end sm:justify-end flex items-center justify-center">
       <form
         onSubmit={handleSearch}
-        className="rounded-xl flex items-center min-w-[200px] gap-2  px-2 py-1">
+        className="rounded-xl flex items-center sm:flex-nowrap flex-wrap w-full sm:min-w-[200px] gap-2  px-2 py-1">
         <div className="relative peer">
           <input
             type="text"

@@ -41,12 +41,13 @@ export const Products: FC<ProductsProp> = ({
 
   const dataToRender = isInitialized ? storeProducts : products;
 
+
   const handlePageChange = (page: number) => {
     setPage(page); // با تغییر صفحه، داده‌ها از استور رفرش میشن
   };
 
   return (
-    <div className="py-32 px-4 sm:px-6 lg:px-8 bg-gray-50 relative ">
+    <section id="products" className="py-32 px-4 sm:px-6 lg:px-8 bg-gray-50 relative ">
       <BackgroundElements />
       <div className="max-w-7xl mx-auto relative z-10">
         <Title />
@@ -97,6 +98,6 @@ export const Products: FC<ProductsProp> = ({
           onPageChange={handlePageChange}
         />
       </div>
-    </div>
+    </section>
   );
 };

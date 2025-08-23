@@ -1,5 +1,6 @@
 import { Heart, Share2, ShoppingCart } from 'lucide-react'
 import React, { useState } from 'react'
+import { addToCart } from '@/utils/global/addToCart';
 
 interface ActionButtonsProps {
   productId: number;
@@ -21,53 +22,59 @@ export const ActionButtons: React.FC<ActionButtonsProps> = ({
   mainProductId
 }) => {
   const [isLiked, setIsLiked] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleAddToCart = async () => {
-    let cartItem;
-  
-    if (isVariable) {
-      if (!selectedVariationId) {
-        console.log('Please select product variations before adding to cart');
-        return;
-      }
-      // محصول وریشنی
-      cartItem = {
-        variation_id: selectedVariationId,
-        quantity: quantity || 1,
-        attributes: selectedAttributes // { color: "red", size: "M" }
-      };
-    } else {
-      // محصول ساده
-      cartItem = {
-        id: productId,
-        quantity: quantity || 1
-      };
-    }
-  
-    console.log("Cart item payload:", cartItem);
-  
+    if (isLoading) return; // Prevent multiple clicks
+    
+    setIsLoading(true);
+
     try {
-      const res = await fetch("/api/routes/cart/add", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(cartItem),
-        credentials: "include", // کوکی سشن کاربر
-      });
-  
-      const data = await res.json();
-  
-      if (res.ok) {
-        console.log("Product added to cart:", data);
-        // اینجا می‌تونی state کارت رو آپدیت کنی یا نوتیفیکیشن بدهی
+      let cartItem;
+
+      if (isVariable) {
+        if (!selectedVariationId) {
+          return; // This should not happen due to button disabled state
+        }
+        // محصول وریشنی
+        cartItem = {
+          variation_id: selectedVariationId,
+          quantity: quantity || 1,
+          attributes: selectedAttributes
+        };
       } else {
-        console.error("Error adding product to cart:", data);
+        // محصول ساده
+        cartItem = {
+          id: productId,
+          quantity: quantity || 1
+        };
       }
-    } catch (err) {
-      console.error("Fetch error:", err);
+
+      console.log("Cart item payload:", cartItem);
+
+      const result = await addToCart(cartItem, {
+        onSuccess: (data) => {
+          console.log("Product added to cart successfully:", data);
+          // اینجا می‌تونی state کارت رو آپدیت کنی
+        },
+        onError: (error) => {
+          console.error("Error adding product to cart:", error);
+        },
+        onFinally: () => {
+          setIsLoading(false);
+        }
+      });
+
+      if (!result.success) {
+        // Error is already handled by the global function
+        console.error("Failed to add product to cart");
+      }
+
+    } catch (error) {
+      console.error("Unexpected error:", error);
+      setIsLoading(false);
     }
   };
-  
-  
 
   const handleWishlist = () => {
     setIsLiked(!isLiked);
@@ -81,17 +88,19 @@ export const ActionButtons: React.FC<ActionButtonsProps> = ({
 
   const isInStock = stockStatus === "instock";
   const canAddToCart = isInStock && (!isVariable || (isVariable && selectedVariationId));
+  const isButtonDisabled = !canAddToCart || isLoading;
 
   return (
     <div className="space-y-4">
       <button
         onClick={handleAddToCart}
-        disabled={!canAddToCart}
+        disabled={isButtonDisabled}
         className="w-full bg-gradient-to-r from-amber-600 to-amber-700 text-white py-5 px-8 rounded-2xl font-bold text-lg hover:from-amber-700 hover:to-amber-800 transform hover:scale-[1.02] transition-all duration-300 shadow-xl hover:shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center space-x-3"
       >
         <ShoppingCart className="w-6 h-6" />
         <span>
-          {!isInStock ? 'Out of Stock' : 
+          {isLoading ? 'Adding to Cart...' :
+           !isInStock ? 'Out of Stock' : 
            isVariable && !selectedVariationId ? 'Select Options' : 
            'Add to Cart'}
         </span>
@@ -100,18 +109,20 @@ export const ActionButtons: React.FC<ActionButtonsProps> = ({
       <div className="flex space-x-4">
         <button 
           onClick={handleWishlist}
+          disabled={isLoading}
           className={`flex-1 border-2 py-4 px-6 rounded-2xl font-semibold transition-all duration-300 flex items-center justify-center space-x-2 ${
             isLiked 
               ? 'border-red-300 text-red-600 bg-red-50' 
               : 'border-gray-300 text-gray-700 hover:border-gray-400'
-          }`}
+          } disabled:opacity-50 disabled:cursor-not-allowed`}
         >
           <Heart className={`w-5 h-5 ${isLiked ? 'fill-current' : ''}`} />
           <span>Wishlist</span>
         </button>
         <button 
           onClick={handleShare}
-          className="flex-1 border-2 border-gray-300 text-gray-700 py-4 px-6 rounded-2xl font-semibold hover:border-gray-400 transition-all duration-300 flex items-center justify-center space-x-2"
+          disabled={isLoading}
+          className="flex-1 border-2 border-gray-300 text-gray-700 py-4 px-6 rounded-2xl font-semibold hover:border-gray-400 transition-all duration-300 flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <Share2 className="w-5 h-5" />
           <span>Share</span>
@@ -130,6 +141,7 @@ export const ActionButtons: React.FC<ActionButtonsProps> = ({
           'None'}</p>
         <p>Stock Status: {stockStatus}</p>
         <p>Can Add to Cart: {canAddToCart ? 'Yes' : 'No'}</p>
+        <p>Is Loading: {isLoading ? 'Yes' : 'No'}</p>
       </div> */}
     </div>
   )

@@ -2,12 +2,14 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { ShoppingCart, Eye, Heart, Star } from "lucide-react";
+import { ShoppingCart, Eye, Heart, Star, LayoutDashboard } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { useState } from "react";
 import type { ProductCard } from "@/types/product";
 import { Products } from "../Products";
 import { formatPrice } from "@/utils/global/format-price";
+import { Select } from "@radix-ui/react-select";
+import { SelectGroup } from "@/components/ui/select";
 
 interface ProductCardProps {
   product: ProductCard;
@@ -39,8 +41,6 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
   const [isLiked, setIsLiked] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
 
-
-
   // console.log(product)
   return (
     <div
@@ -65,7 +65,9 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
 
         {/* Loading Skeleton */}
         {!imageLoaded && (
-          <div style={{fontFamily:"fantasy"}} className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-300 animate-pulse "></div>
+          <div
+            style={{ fontFamily: "fantasy" }}
+            className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-300 animate-pulse "></div>
         )}
 
         {/* Stock Badge */}
@@ -81,12 +83,14 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
         </div>
 
         {/* Rating */}
-        <div className="absolute top-4 right-4 flex items-center space-x-1 bg-white/90 backdrop-blur-sm rounded-full px-2 py-1">
-          <Star className="w-4 h-4 text-amber-400 fill-current" />
-          <span className="text-xs font-bold text-gray-800">
-            {product.average_rating}
-          </span>
-        </div>
+        {product.average_rating !== "0.00" ? (
+          <div className="absolute top-4 right-4 flex items-center space-x-1 bg-white/90 backdrop-blur-sm rounded-full px-2 py-1">
+            <Star className="w-4 h-4 text-amber-400 fill-current" />
+            <span className="text-xs font-bold text-gray-800">
+              {product.average_rating}
+            </span>
+          </div>
+        ) : null}
       </div>
 
       {/* Overlay */}
@@ -132,9 +136,16 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
             </div>
           </div>
 
-          <button className="bg-gradient-to-r from-amber-500 to-amber-600 text-white p-3 rounded-full hover:from-amber-600 hover:to-amber-700 transition-all duration-300 hover:scale-110 shadow-lg hover:shadow-xl">
-            <ShoppingCart className="w-5 h-5" />
-          </button>
+          {product.type === "simple" ? (
+            <button className="bg-gradient-to-r from-amber-500 to-amber-600 text-white p-3 rounded-full hover:from-amber-600 hover:to-amber-700 transition-all duration-300 hover:scale-110 shadow-lg hover:shadow-xl flex items-center justify-center">
+              <ShoppingCart className="w-5 h-5" />
+            </button>
+          ) : (
+            <button className="bg-gradient-to-r from-amber-500 to-amber-600 text-white p-3 rounded-full hover:from-amber-600 hover:to-amber-700 transition-all duration-300 hover:scale-110 shadow-lg hover:shadow-xl flex items-center justify-center">
+              <LayoutDashboard className="w-5 h-5" />
+            </button>
+          )}
+
         </div>
         <div className="p-6 bg-white w-full relative z-10 h-[205px] ">
           <div className="flex items-center justify-between mb-3">
