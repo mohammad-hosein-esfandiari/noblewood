@@ -33,6 +33,7 @@ export const ProductContent: FC<ProductContentProps> = ({ product, setCurrentIma
     sale_price: "",
   });
   const [selectedVariationId, setSelectedVariationId] = useState<number | null>(null);
+  const [selectedAttributes, setSelectedAttributes] = useState<{ [key: string]: string }>({});
   const [quantity, setQuantity] = useState<number>(1);
 
   const default_price: DefaultPriceProps = {
@@ -53,7 +54,7 @@ export const ProductContent: FC<ProductContentProps> = ({ product, setCurrentIma
   };
 
   return (
-    <div className="p-8 flex-1">
+    <div className="p-8 flex-1 flex flex-col justify-between">
       <Title title={product.name} sku={product.sku} />
       <Rating
         averageRating={product.average_rating}
@@ -81,6 +82,7 @@ export const ProductContent: FC<ProductContentProps> = ({ product, setCurrentIma
           setPrice={setPrice}
           setCurrentImageIndex={setCurrentImageIndex}
           setSelectedVariationId={setSelectedVariationId}
+          setSelectedAttributes={setSelectedAttributes}
         />
       )}
       <Features />
@@ -92,6 +94,9 @@ export const ProductContent: FC<ProductContentProps> = ({ product, setCurrentIma
         isVariable={product.type === "variable"}
         selectedVariationId={selectedVariationId}
         stockStatus={product.stock_status}
+        quantity={quantity}
+        selectedAttributes={selectedAttributes}
+        mainProductId={product.id}
       />
     </div>
   );

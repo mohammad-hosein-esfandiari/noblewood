@@ -9,7 +9,7 @@ interface MetaDataProps {
 
 export const MetaData: FC<MetaDataProps> = ({ brands, dimensions, weight }) => {
   return (
-    <div className="flex flex-wrap transition-all gap-2 mb-8">
+    <div className="flex flex-wrap transition-all gap-2 mb-2">
       {dimensions?.width || dimensions?.height || dimensions?.length ? (
         <div className="bg-gradient-to-br transition-all duration-300 from-gray-50 to-gray-100 py-3 px-4 rounded-2xl">
           <h4 className="font-semibold text-[14px] text-gray-800 mb-1 flex items-center">

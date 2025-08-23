@@ -3,7 +3,7 @@ import React from "react";
 
 export const Features = () => {
   return (
-    <div className="flex items-center justify-center gap-4 flex-wrap mb-8">
+    <div className="flex items-center justify-center gap-4 flex-wrap mb-4 mt-4">
       {[
         { icon: <Shield className="w-5 h-5" />, text: "2 Year Warranty" },
         { icon: <Truck className="w-5 h-5" />, text: "Free Shipping" },

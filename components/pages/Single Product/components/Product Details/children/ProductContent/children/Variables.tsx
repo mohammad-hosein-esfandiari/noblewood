@@ -18,6 +18,7 @@ interface VariablesProps {
   setPrice: React.Dispatch<React.SetStateAction<DefaultPriceProps>>;
   setCurrentImageIndex: React.Dispatch<React.SetStateAction<number>>;
   setSelectedVariationId: React.Dispatch<React.SetStateAction<number | null>>;
+  setSelectedAttributes: React.Dispatch<React.SetStateAction<{ [key: string]: string }>>;
 }
 
 export const Variables: FC<VariablesProps> = ({
@@ -27,7 +28,8 @@ export const Variables: FC<VariablesProps> = ({
   product,
   setPrice,
   setCurrentImageIndex,
-  setSelectedVariationId
+  setSelectedVariationId,
+  setSelectedAttributes
 }) => {
   const { attributes, variations } = data;
   const [selectedAttrs, setSelectedAttrs] = useState<{ [key: string]: string }>(
@@ -68,6 +70,8 @@ export const Variables: FC<VariablesProps> = ({
 
     // 2️⃣ اعمال تغییر انتخاب‌ها
     setSelectedAttrs(updated);
+    // Update parent component's selectedAttributes state
+    setSelectedAttributes(updated);
 
     // 3️⃣ پیدا کردن selected variation با انتخاب جدید
     const selectedVariations = variations.filter((variation) =>
@@ -102,6 +106,7 @@ export const Variables: FC<VariablesProps> = ({
   // هندل حذف همه
   const handleClear = () => {
     setSelectedAttrs({});
+    setSelectedAttributes({});
     setDimenitionsFunc(product.dimensions);
     setWeight(product.weight);
     // Reset to main product image
@@ -124,7 +129,7 @@ export const Variables: FC<VariablesProps> = ({
   };
 
   return (
-    <div className="p-4 border rounded-2xl shadow-sm bg-white space-y-4 mb-8">
+    <div className="p-4 border rounded-2xl shadow-sm bg-white space-y-4 mb-3">
       {/* هدر */}
       <div className="flex justify-between items-center">
         <div className="text-[12px] text-gray-600">

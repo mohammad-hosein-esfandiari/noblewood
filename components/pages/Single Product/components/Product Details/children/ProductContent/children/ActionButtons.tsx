@@ -6,26 +6,68 @@ interface ActionButtonsProps {
   isVariable: boolean;
   selectedVariationId: number | null;
   stockStatus: string;
+  quantity: number;
+  selectedAttributes: { [key: string]: string };
+  mainProductId: number;
 }
 
 export const ActionButtons: React.FC<ActionButtonsProps> = ({ 
   productId, 
   isVariable, 
   selectedVariationId, 
-  stockStatus 
+  stockStatus,
+  quantity,
+  selectedAttributes,
+  mainProductId
 }) => {
   const [isLiked, setIsLiked] = useState(false);
 
-  const handleAddToCart = () => {
-    // Log the current product ID for debugging
-    console.log('Adding to cart - Product ID:', productId);
-    console.log('Is Variable Product:', isVariable);
-    console.log('Selected Variation ID:', selectedVariationId);
-    console.log('Stock Status:', stockStatus);
-    
-    // Here you can implement the actual add to cart logic
-    // The productId will be either the main product ID or the selected variation ID
+  const handleAddToCart = async () => {
+    let cartItem;
+  
+    if (isVariable) {
+      if (!selectedVariationId) {
+        console.log('Please select product variations before adding to cart');
+        return;
+      }
+      // محصول وریشنی
+      cartItem = {
+        variation_id: selectedVariationId,
+        quantity: quantity || 1,
+        attributes: selectedAttributes // { color: "red", size: "M" }
+      };
+    } else {
+      // محصول ساده
+      cartItem = {
+        id: productId,
+        quantity: quantity || 1
+      };
+    }
+  
+    console.log("Cart item payload:", cartItem);
+  
+    try {
+      const res = await fetch("/api/routes/cart/add", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(cartItem),
+        credentials: "include", // کوکی سشن کاربر
+      });
+  
+      const data = await res.json();
+  
+      if (res.ok) {
+        console.log("Product added to cart:", data);
+        // اینجا می‌تونی state کارت رو آپدیت کنی یا نوتیفیکیشن بدهی
+      } else {
+        console.error("Error adding product to cart:", data);
+      }
+    } catch (err) {
+      console.error("Fetch error:", err);
+    }
   };
+  
+  
 
   const handleWishlist = () => {
     setIsLiked(!isLiked);
@@ -38,16 +80,21 @@ export const ActionButtons: React.FC<ActionButtonsProps> = ({
   };
 
   const isInStock = stockStatus === "instock";
+  const canAddToCart = isInStock && (!isVariable || (isVariable && selectedVariationId));
 
   return (
     <div className="space-y-4">
       <button
         onClick={handleAddToCart}
-        disabled={!isInStock}
+        disabled={!canAddToCart}
         className="w-full bg-gradient-to-r from-amber-600 to-amber-700 text-white py-5 px-8 rounded-2xl font-bold text-lg hover:from-amber-700 hover:to-amber-800 transform hover:scale-[1.02] transition-all duration-300 shadow-xl hover:shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center space-x-3"
       >
         <ShoppingCart className="w-6 h-6" />
-        <span>{isInStock ? 'Add to Cart' : 'Out of Stock'}</span>
+        <span>
+          {!isInStock ? 'Out of Stock' : 
+           isVariable && !selectedVariationId ? 'Select Options' : 
+           'Add to Cart'}
+        </span>
       </button>
 
       <div className="flex space-x-4">
@@ -72,12 +119,18 @@ export const ActionButtons: React.FC<ActionButtonsProps> = ({
       </div>
 
       {/* Debug info - you can remove this in production */}
-      <div className="text-xs text-gray-500 p-2 bg-gray-100 rounded">
+      {/* <div className="text-xs text-gray-500 p-2 bg-gray-100 rounded">
+        <p>Main Product ID: {mainProductId}</p>
         <p>Current Product ID: {productId}</p>
         <p>Is Variable: {isVariable ? 'Yes' : 'No'}</p>
         {isVariable && <p>Selected Variation ID: {selectedVariationId || 'None'}</p>}
+        <p>Quantity: {quantity}</p>
+        <p>Selected Attributes: {Object.keys(selectedAttributes).length > 0 ? 
+          Object.entries(selectedAttributes).map(([key, value]) => `${key}: ${value}`).join(', ') : 
+          'None'}</p>
         <p>Stock Status: {stockStatus}</p>
-      </div>
+        <p>Can Add to Cart: {canAddToCart ? 'Yes' : 'No'}</p>
+      </div> */}
     </div>
   )
 }
