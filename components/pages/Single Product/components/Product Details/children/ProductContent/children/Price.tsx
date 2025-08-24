@@ -7,6 +7,7 @@ import {
 import React, { FC } from "react";
 import { DefaultPriceProps } from "../ProductContent";
 import { formatPrice } from "@/utils/global/format-price";
+import { getPriceRange } from "@/utils/global/get-price-range";
 interface PriceProps {
   type: ProductType;
   price: DefaultPriceProps;
@@ -24,17 +25,7 @@ export const Price: FC<PriceProps> = ({
 }) => {
 
 
-  function getPriceRange(variations: Variation[]) {
-    const prices = variations
-      .map((v) => v.sale_price ?? v.regular_price) // اگه سیل پرایس داشت همونو می‌گیره، وگرنه رگولار
-      .filter((p) => p !== null)
-      .sort((a, b) => a - b);
 
-    return {
-      minPrice: prices[0],
-      maxPrice: prices[prices.length - 1],
-    };
-  }
 
   const DefaultPriceRange = () => {
     const { maxPrice, minPrice } = getPriceRange(variotionsData.variations);

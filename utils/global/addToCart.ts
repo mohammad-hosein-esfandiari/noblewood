@@ -1,4 +1,5 @@
 import toast from 'react-hot-toast';
+import { getTokenCookie } from '@/utils/other/cookie'; // تابعی که قبلاً ساختیم
 
 interface CartItem {
   id?: number;
@@ -20,11 +21,16 @@ export const addToCart = async (
   const { onSuccess, onError, onFinally } = options;
 
   try {
+    const cartToken = getTokenCookie("NW-CART"); // خواندن کوکی
+
     const res = await fetch("/api/routes/cart/add", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        "Content-Type": "application/json",
+        ...(cartToken ? { "X-Cart-Token": cartToken } : {}) // ست کردن هدر
+      },
       body: JSON.stringify(cartItem),
-      credentials: "include", // کوکی سشن کاربر
+      credentials: "include",
     });
 
     const data = await res.json();

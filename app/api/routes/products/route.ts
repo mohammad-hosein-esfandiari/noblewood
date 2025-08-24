@@ -35,6 +35,7 @@ function extractSelectedFields(products: RawProduct[]) {
     images: product.images,
     stock_status: product.stock_status,
     categories: product.categories,
+    attributes: product.variation_attributes || [],
   }));
 }
 
