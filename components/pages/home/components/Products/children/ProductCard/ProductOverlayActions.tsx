@@ -6,28 +6,31 @@ import { useState } from "react";
 import type { ProductCard as ProductCardType } from "@/types/product";
 import { DiscountBadge } from "./DiscountBadge";
 import { addSimpleProductToCart } from "@/utils/global/addToCart";
+import toast from "react-hot-toast";
+import { useCartStore } from "@/store/cart";
 
 interface ProductOverlayActionsProps {
   product: ProductCardType;
 }
 
 export function ProductOverlayActions({ product }: ProductOverlayActionsProps) {
+  const {increase } = useCartStore()
   const [isAddingToCart, setIsAddingToCart] = useState(false);
 
   const handleAddToCart = async () => {
     // Validation checks
     if (product.type !== "simple") {
-      console.warn("Cannot add variable product to cart from product card");
+      toast.error("Cannot add variable product to cart from product card");
       return;
     }
 
     if (product.stock_status !== "instock") {
-      console.warn("Product is out of stock");
+      toast.error("Product is out of stock");
       return;
     }
 
     if (!product.id) {
-      console.error("Product ID is missing");
+      toast.error("Product ID is missing");
       return;
     }
 
@@ -40,6 +43,7 @@ export function ProductOverlayActions({ product }: ProductOverlayActionsProps) {
         {
           onSuccess: () => {
             console.log("Product added to cart successfully");
+             increase()
           },
           onError: (error) => {
             console.error("Failed to add product to cart:", error);

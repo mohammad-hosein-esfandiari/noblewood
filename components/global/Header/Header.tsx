@@ -6,6 +6,8 @@ import { NavLinks } from "./components/NavLinks";
 import { CartButton } from "./components/CartButton";
 import { MobileMenuButton } from "./components/MobileMenuButton";
 import { MobileMenu } from "./components/MobileMenu";
+import { useCart } from "@/hooks/use-cart";
+import { useCartStore } from "@/store/cart";
 
 export interface HeaderProps {
   isScrolled?: boolean; // Add any other props you might need
@@ -16,10 +18,17 @@ export interface MobileMenuButtonProps extends HeaderProps {
 }
 
 export default function Header() {
+  const {cartCount } = useCart()
+  const {setCount , count} = useCartStore()
+
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const pathname = usePathname();
   const noHeaderRoutes: String[] = ["/login", "/signup", "/forgot-password" ];
   const [isScrolled, setIsScrolled] = useState<boolean>(false);
+
+  useEffect(() => {
+    setCount(cartCount);
+  }, [cartCount, setCount]);
 
   useEffect(() => {
     if (pathname !== "/") {
@@ -38,9 +47,11 @@ export default function Header() {
 
     window.addEventListener("scroll", handleScroll);
     handleScroll();
-
+    
     return () => window.removeEventListener("scroll", handleScroll);
   }, [pathname]);
+  
+
 
   if (noHeaderRoutes.includes("/"+pathname.split("/")[1])) {
     return <></>;
@@ -60,7 +71,7 @@ export default function Header() {
 
           {/* Cart and Mobile Menu */}
           <div className="flex items-center space-x-4">
-            <CartButton isScrolled={isScrolled} />
+            <CartButton isScrolled={isScrolled} cartCount={count} />
             <MobileMenuButton
               isMenuOpen={isMenuOpen}
               isScrolled={isScrolled}

@@ -1,4 +1,6 @@
+import { createResponse } from "@/app/api/utils/createResponse";
 import { NextResponse } from "next/server";
+
 
 interface AddToCartBody {
   id: number;
@@ -11,19 +13,22 @@ export async function POST(request: Request) {
   try {
     const body: AddToCartBody = await request.json();
     const WP_URL = process.env.WOOCOMMERCE_URL;
+
     if (!WP_URL) {
-      return NextResponse.json({ error: "WOOCOMMERCE_URL not defined" }, { status: 500 });
+      return NextResponse.json(
+        createResponse("error", 500, "WOOCOMMERCE_URL not defined"),
+        { status: 500 }
+      );
     }
 
-    // ⚡ دریافت Cart-Token از هدر درخواست
     const nonceHeader = request.headers.get("X-Cart-Token");
-    console.log("📥 Received Cart-Token from request header:", nonceHeader);
-
     if (!nonceHeader) {
-      return NextResponse.json({ error: "Cart-Token not provided in request headers" }, { status: 400 });
+      return NextResponse.json(
+        createResponse("error", 400, "Cart-Token not provided in request headers"),
+        { status: 400 }
+      );
     }
 
-    // ⚡ ساخت payload
     const payload: any = {
       id: body.id,
       quantity: body.quantity || 1,
@@ -34,7 +39,6 @@ export async function POST(request: Request) {
       payload.attributes = body.attributes;
     }
 
-    // ⚡ Add-to-Cart با Cart-Token دریافتی
     const response = await fetch(`${WP_URL}/wp-json/wc/store/cart/items`, {
       method: "POST",
       headers: {
@@ -46,9 +50,13 @@ export async function POST(request: Request) {
     });
 
     const data = await response.json();
-    console.log("📥 WooCommerce Add-to-Cart response:", data);
+    if(data.code == "woocommerce_rest_product_partially_out_of_stock"){
+      return NextResponse.json(
+        createResponse("error", 400, "There is not enough stock!"),
+        { status: 400 }
+      );
+    }
 
-    // بازگرداندن کوکی‌ها به فرانت
     const headers = new Headers();
     response.headers.forEach((value, key) => {
       if (key.toLowerCase() === "set-cookie") {
@@ -56,9 +64,15 @@ export async function POST(request: Request) {
       }
     });
 
-    return NextResponse.json(data, { headers });
+
+    return NextResponse.json(
+      createResponse("success", 200, "Product added to cart successfully", data),
+      { headers }
+    );
   } catch (err: any) {
-    console.error("❌ Error in POST /cart/add:", err);
-    return NextResponse.json({ error: err.message || "Internal Server Error" }, { status: 500 });
+    return NextResponse.json(
+      createResponse("error", 500, err.message || "Internal Server Error"),
+      { status: 500 }
+    );
   }
 }

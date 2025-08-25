@@ -4,8 +4,14 @@ import { HeaderProps } from '../Header'
 import { ShoppingCart } from 'lucide-react'
 import { useCart } from '@/contexts/CartContext'
 
-export const CartButton:FC<HeaderProps> = ({isScrolled}) => {
-    const { state } = useCart();
+interface CartButtonProps extends HeaderProps {
+  cartCount : number
+}
+
+
+
+export const CartButton:FC<CartButtonProps > = ({isScrolled ,cartCount}) => {
+     
   return (
     <Link
     href="/cart"
@@ -17,9 +23,9 @@ export const CartButton:FC<HeaderProps> = ({isScrolled}) => {
     <ShoppingCart
       className={`w-6 h-6 ${isScrolled ? "text-amber-900" : ""}`}
     />
-    {state.itemCount > 0 && (
+    {cartCount> 0 && (
       <span className="absolute -top-1 -right-1 bg-gradient-to-r from-red-500 to-red-600 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center font-bold shadow-lg animate-pulse">
-        {state.itemCount}
+        {cartCount}
       </span>
     )}
     <div

@@ -1,6 +1,7 @@
 import { Heart, Share2, ShoppingCart } from 'lucide-react'
 import React, { useState } from 'react'
 import { addToCart } from '@/utils/global/addToCart';
+import { useCartStore } from '@/store/cart';
 
 interface ActionButtonsProps {
   productId: number;
@@ -21,6 +22,7 @@ export const ActionButtons: React.FC<ActionButtonsProps> = ({
   selectedAttributes,
   mainProductId
 }) => {
+  const {count , setCount } = useCartStore()
   const [isLiked, setIsLiked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -55,6 +57,7 @@ export const ActionButtons: React.FC<ActionButtonsProps> = ({
       const result = await addToCart(cartItem, {
         onSuccess: (data) => {
           console.log("Product added to cart successfully:", data);
+          setCount(count + cartItem.quantity)
           // اینجا می‌تونی state کارت رو آپدیت کنی
         },
         onError: (error) => {

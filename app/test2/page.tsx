@@ -60,7 +60,7 @@ export default function CartPage() {
         console.log("📥 /cart response:", cartData);
 
         if (cartRes.ok) {
-          setCart(cartData?.items || []);
+          setCart(cartData?.result || []);
         } else {
           setErrors((prev) => [...prev, "Failed to fetch cart items"]);
         }
