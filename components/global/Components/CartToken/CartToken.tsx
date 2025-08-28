@@ -2,6 +2,7 @@
 
 import { getTokenCookie, setTokenCookie } from "@/utils/other/cookie";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 interface CartItem {
   key: string;
@@ -13,13 +14,12 @@ interface CartItem {
   };
 }
 
-export default function CartPage() {
-  const [cart, setCart] = useState<CartItem[]>([]);
-  const [errors, setErrors] = useState<string[]>([]);
+export default function CartToken() {
 
   useEffect(() => {
     const fetchCartTokenAndItems = async () => {
       try {
+
         // 1️⃣ خواندن توکن از کوکی
         let cartToken = getTokenCookie("NW-CART");
 
@@ -38,12 +38,13 @@ export default function CartPage() {
             console.log("✅ Cart token set in cookie:", tokenData);
             cartToken = tokenData;
           } else {
+            toast.error(" ⚠️ No token found in response")
             console.warn("⚠️ No token found in response");
           }
         }
 
         if (!cartToken) {
-          setErrors((prev) => [...prev, "Cart token not found"]);
+            toast.error( "Missing cart token...")
           return;
         }
 
@@ -51,7 +52,7 @@ export default function CartPage() {
         const cartRes = await fetch("/api/routes/cart", {
           method: "GET",
           headers: {
-            "X-Cart-Token": cartToken, // فرستادن توکن در هدر
+            "X-Cart-Token": cartToken,
           },
           credentials: "include",
         });
@@ -59,14 +60,11 @@ export default function CartPage() {
         const cartData = await cartRes.json();
         console.log("📥 /cart response:", cartData);
 
-        if (cartRes.ok) {
-          setCart(cartData?.result || []);
-        } else {
-          setErrors((prev) => [...prev, "Failed to fetch cart items"]);
-        }
       } catch (err: any) {
         console.error("❌ Error fetching cart token or items:", err);
-        setErrors((prev) => [...prev, err.message || "Unexpected error"]);
+        toast.error("❌ Error fetching cart token or items")
+      } finally {
+        
       }
     };
 
@@ -74,25 +72,8 @@ export default function CartPage() {
   }, []);
 
   return (
-    <div className="p-4">
-      <h1 className="text-xl font-bold mb-4">🛒 Cart Items</h1>
+    <>
 
-      {errors.length > 0 &&
-        errors.map((errorMsg, index) => <p key={index} className="text-red-600">{errorMsg}</p>)}
-
-      {cart.length > 0 ? (
-        <ul className="space-y-2">
-          {cart.map((item) => (
-            <li key={item.key} className="border rounded-md p-3 shadow-sm bg-white">
-              <p><strong>{item.name}</strong></p>
-              <p>Quantity: {item.quantity}</p>
-              <p>Price: {(item.prices?.price ?? 0) / 100} {item.prices?.currency_code ?? ""}</p>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        errors.length === 0 && <p>Your cart is empty.</p>
-      )}
-    </div>
+    </>
   );
 }

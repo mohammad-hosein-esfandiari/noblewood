@@ -1,4 +1,4 @@
-export const setTokenCookie = (name: string, token: string, rememberMe: boolean) => {
+export const setTokenCookie = (name: string, token: string, rememberMe?: boolean) => {
   const baseCookie = `${name}=${token}; path=/; secure; SameSite=Lax;`;
 
   if (rememberMe) {

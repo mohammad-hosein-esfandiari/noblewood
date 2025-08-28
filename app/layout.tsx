@@ -4,7 +4,6 @@ import { Inter } from 'next/font/google';
 import { CartProvider } from '@/contexts/CartContext';
 import Header from '@/components/global/Header/Header';
 import  { Toaster } from 'react-hot-toast';
-
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {

@@ -48,14 +48,21 @@ export async function POST(request: Request) {
       },
       body: JSON.stringify(payload),
     });
-
     const data = await response.json();
-    if(data.code == "woocommerce_rest_product_partially_out_of_stock"){
+    if(data.code == "woocommerce_rest_missing_nonce"){
       return NextResponse.json(
-        createResponse("error", 400, "There is not enough stock!"),
+        createResponse("error", 400, "Error in user Auth"),
         { status: 400 }
       );
     }
+
+    if(data.code == "woocommerce_rest_product_partially_out_of_stock"){
+      return NextResponse.json(
+        createResponse("error", 400, "There is not enough stock!"  ),
+        { status: 400 }
+      );
+    }
+
 
     const headers = new Headers();
     response.headers.forEach((value, key) => {

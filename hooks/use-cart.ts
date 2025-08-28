@@ -36,7 +36,7 @@ export function useCart(): UseCartReturn {
         const tokenData = await tokenRes.json();
 
         if (tokenData) {
-          setTokenCookie("NW-CART", tokenData, true);
+          setTokenCookie("NW-CART", tokenData);
           cartToken = tokenData;
           toast.success("Cart token created ✅");
         } else {
