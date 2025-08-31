@@ -93,7 +93,7 @@ export function ProductOverlayActions({ product }: ProductOverlayActionsProps) {
         </div>
       ) : (
         <Link
-          href={`/product/${product.slug}`}
+          href={`/products/${product.slug}`}
           className="bg-gradient-to-r from-amber-500 to-amber-600 text-white p-3 rounded-full hover:from-amber-600 hover:to-amber-700 transition-all duration-300 hover:scale-110 shadow-lg hover:shadow-xl flex items-center justify-center"
           title="View Product Details">
           <LayoutDashboard className="w-5 h-5" />

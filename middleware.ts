@@ -57,5 +57,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/api/protected/:path*'], // مسیرهای محافظت شده
+  matcher: ['/api/routes/protected/:path*'], // مسیرهای محافظت شده
 };

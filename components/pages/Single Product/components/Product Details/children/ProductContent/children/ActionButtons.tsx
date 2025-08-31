@@ -2,6 +2,7 @@ import { Heart, Share2, ShoppingCart } from 'lucide-react'
 import React, { useState } from 'react'
 import { addToCart } from '@/utils/global/addToCart';
 import { useCartStore } from '@/store/cart';
+import { LocalCart } from '@/utils/global/localCart';
 
 interface ActionButtonsProps {
   productId: number;
@@ -28,53 +29,41 @@ export const ActionButtons: React.FC<ActionButtonsProps> = ({
 
   const handleAddToCart = async () => {
     if (isLoading) return; // Prevent multiple clicks
-    
     setIsLoading(true);
-
+  
     try {
       let cartItem;
-
+      
+  
       if (isVariable) {
-        if (!selectedVariationId) {
-          return; // This should not happen due to button disabled state
-        }
-        // محصول وریشنی
+        if (!selectedVariationId) return; // Button should be disabled in this case
         cartItem = {
           variation_id: selectedVariationId,
           quantity: quantity || 1,
           attributes: selectedAttributes
         };
+  
+        // اضافه کردن به لوکال استوریج
+        LocalCart.addVariableProduct(
+          selectedVariationId,
+          quantity || 1,
+          selectedAttributes
+        );
+  
       } else {
-        // محصول ساده
         cartItem = {
           id: productId,
           quantity: quantity || 1
         };
+  
+        // اضافه کردن به لوکال استوریج
+        LocalCart.addSimpleProduct(productId, quantity || 1);
       }
-
-      console.log("Cart item payload:", cartItem);
-
-      const result = await addToCart(cartItem, {
-        onSuccess: (data) => {
-          console.log("Product added to cart successfully:", data);
-          setCount(count + cartItem.quantity)
-          // اینجا می‌تونی state کارت رو آپدیت کنی
-        },
-        onError: (error) => {
-          console.error("Error adding product to cart:", error);
-        },
-        onFinally: () => {
-          setIsLoading(false);
-        }
-      });
-
-      if (!result.success) {
-        // Error is already handled by the global function
-        console.error("Failed to add product to cart");
-      }
-
+  
+      console.log("Cart item added:", cartItem);
     } catch (error) {
       console.error("Unexpected error:", error);
+    } finally {
       setIsLoading(false);
     }
   };

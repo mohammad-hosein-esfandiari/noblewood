@@ -5,7 +5,7 @@ import { getTokenCookie, setTokenCookie } from "@/utils/other/cookie";
 import toast from "react-hot-toast";
 
 interface CartItem {
-  [key:string]: any;
+  [key: string]: any;
 }
 
 interface UseCartReturn {
@@ -26,45 +26,50 @@ export function useCart(): UseCartReturn {
       setLoading(true);
 
       let cartToken = getTokenCookie("NW-CART");
+      let authToken = getTokenCookie("NW-AUTH");
+     
+      if (authToken) {
+        console.log("logged")
+      } else {
+        if (!cartToken) {
+          const tokenRes = await fetch("/api/routes/cart/cart-token", {
+            method: "GET",
+            credentials: "include",
+          });
 
-      if (!cartToken) {
-        const tokenRes = await fetch("/api/routes/cart/cart-token", {
+          const tokenData = await tokenRes.json();
+
+          if (tokenData) {
+            setTokenCookie("NW-CART", tokenData);
+            cartToken = tokenData;
+            toast.success("Cart token created ✅");
+          } else {
+            toast.error("No cart token found ⚠️");
+          }
+        }
+
+        if (!cartToken) {
+          setErrors((prev) => [...prev, "Cart token not found"]);
+          return;
+        }
+
+        const cartRes = await fetch("/api/routes/cart", {
           method: "GET",
+          headers: {
+            "X-Cart-Token": cartToken,
+          },
           credentials: "include",
         });
 
-        const tokenData = await tokenRes.json();
+        const cartData = await cartRes.json();
 
-        if (tokenData) {
-          setTokenCookie("NW-CART", tokenData);
-          cartToken = tokenData;
-          toast.success("Cart token created ✅");
+        if (cartRes.ok) {
+          setCart(cartData?.result || []);
         } else {
-          toast.error("No cart token found ⚠️");
+          const msg = "Failed to fetch cart items ❌";
+          toast.error(msg);
+          setErrors((prev) => [...prev, msg]);
         }
-      }
-
-      if (!cartToken) {
-        setErrors((prev) => [...prev, "Cart token not found"]);
-        return;
-      }
-
-      const cartRes = await fetch("/api/routes/cart", {
-        method: "GET",
-        headers: {
-          "X-Cart-Token": cartToken,
-        },
-        credentials: "include",
-      });
-
-      const cartData = await cartRes.json();
-
-      if (cartRes.ok) {
-        setCart(cartData?.result || []);
-      } else {
-        const msg = "Failed to fetch cart items ❌";
-        toast.error(msg);
-        setErrors((prev) => [...prev, msg]);
       }
     } catch (err: any) {
       const msg = err.message || "Unexpected error ❌";
