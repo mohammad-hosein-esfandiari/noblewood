@@ -3,6 +3,8 @@ import React, { useState } from 'react'
 import { addToCart } from '@/utils/global/addToCart';
 import { useCartStore } from '@/store/cart';
 import { LocalCart } from '@/utils/global/localCart';
+import API from '@/utils/interceptor/interceptor';
+import toast from 'react-hot-toast';
 
 interface ActionButtonsProps {
   productId: number;
@@ -33,6 +35,7 @@ export const ActionButtons: React.FC<ActionButtonsProps> = ({
   
     try {
       let cartItem;
+     
       
   
       if (isVariable) {
@@ -42,6 +45,7 @@ export const ActionButtons: React.FC<ActionButtonsProps> = ({
           quantity: quantity || 1,
           attributes: selectedAttributes
         };
+
   
         // اضافه کردن به لوکال استوریج
         LocalCart.addVariableProduct(
@@ -51,13 +55,50 @@ export const ActionButtons: React.FC<ActionButtonsProps> = ({
         );
   
       } else {
-        cartItem = {
-          id: productId,
-          quantity: quantity || 1
-        };
-  
-        // اضافه کردن به لوکال استوریج
-        LocalCart.addSimpleProduct(productId, quantity || 1);
+        if (!isVariable) {
+          cartItem = {
+            id: productId,
+            quantity: quantity || 1
+          };
+        
+          const productData = await API.get(`/products/quantity?type=simple&id=${mainProductId}`);
+        
+          if (productData.status === 200) {
+            const { manage_stock, stock_quantity, stock_status } = productData.data.result;
+        
+            if (manage_stock) {
+              if (stock_status !== "instock" || stock_quantity === 0) {
+                toast.error("Product is out of stock!");
+                setIsLoading(false);
+                return;
+              }
+        
+              const localCart = LocalCart.getCart();
+              const existingItem = localCart.find(item => item.id === productId);
+        
+              if (existingItem) {
+                if (existingItem.quantity >= stock_quantity) {
+                  existingItem.quantity = stock_quantity; // محدود کردن به موجودی واقعی
+                  LocalCart.setCart(localCart); // بروزرسانی لوکال استوریج
+                  toast.error(`No more stock available!`);
+                  setIsLoading(false);
+                  return;
+                }
+              } else {
+                // اگر محصول در لوکال نیست ولی تعداد انتخابی بیشتر از موجودی واقعی است
+                if (cartItem.quantity > stock_quantity) {
+                  cartItem.quantity = stock_quantity;
+                  toast.error(`Only ${stock_quantity} items are available!`);
+                }
+              }
+            }
+          }
+        
+          // اضافه کردن یا بروزرسانی در localStorage
+          LocalCart.addSimpleProduct(productId, cartItem.quantity);
+        }
+        
+        
       }
   
       console.log("Cart item added:", cartItem);

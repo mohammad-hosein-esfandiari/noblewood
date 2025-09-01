@@ -53,6 +53,8 @@ export const ProductContent: FC<ProductContentProps> = ({ product, setCurrentIma
     return product.id;
   };
 
+  console.log(product)
+
   return (
     <div className="p-8 flex-1 flex flex-col justify-between">
       <Title title={product.name} sku={product.sku} />
