@@ -8,6 +8,7 @@ import { MobileMenuButton } from "./components/MobileMenuButton";
 import { MobileMenu } from "./components/MobileMenu";
 import { useCart } from "@/hooks/use-cart";
 import { useCartStore } from "@/store/cart";
+import { LocalCart } from "@/utils/global/localCart";
 
 export interface HeaderProps {
   isScrolled?: boolean; // Add any other props you might need
@@ -18,7 +19,7 @@ export interface MobileMenuButtonProps extends HeaderProps {
 }
 
 export default function Header() {
-  const {cartCount } = useCart()
+ 
   const {setCount , count} = useCartStore()
 
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
@@ -27,8 +28,9 @@ export default function Header() {
   const [isScrolled, setIsScrolled] = useState<boolean>(false);
 
   useEffect(() => {
+    const cartCount = LocalCart.getCartCount();
     setCount(cartCount);
-  }, [cartCount, setCount]);
+  }, [setCount]);
 
   useEffect(() => {
     if (pathname !== "/") {

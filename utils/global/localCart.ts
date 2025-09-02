@@ -87,8 +87,8 @@ export const LocalCart = {
     return this.addItem({ id: productId, quantity });
   },
 
-  addVariableProduct(variationId: number, quantity: number, attributes: { [key: string]: string }) {
-    return this.addItem({ variation_id: variationId, quantity, attributes });
+  addVariableProduct(id:number ,variationId: number, quantity: number, attributes: { [key: string]: string }) {
+    return this.addItem({id, variation_id: variationId, quantity, attributes });
   },
 
   clearCart() {

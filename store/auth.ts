@@ -1,3 +1,4 @@
+import API from "@/utils/interceptor/interceptor";
 import { create } from "zustand";
 
 interface AuthState {
@@ -6,6 +7,7 @@ interface AuthState {
   loading: boolean;
   errors: string[];
   refreshAuth: () => Promise<void>;
+  setLoggedOut: () => void; // ← اضافه شد
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -18,16 +20,25 @@ export const useAuthStore = create<AuthState>((set) => ({
     set({ loading: true, errors: [] });
 
     try {
-      const res = await fetch("/api/routes/auth/verify", { credentials: "include" });
-      const data = await res.json();
+      const res = await API.get("/auth/verify", { withCredentials: true });
+      const data = res.data;
 
       if (data.loggedIn) {
         set({ loggedIn: true, userId: data.userId, loading: false });
+        console.log("✅ Auth verified:", data);
       } else {
+        // توکن نیست یا نامعتبر، فقط لاگ بزن
         set({ loggedIn: false, userId: null, loading: false });
+        console.log("ℹ️ Not logged in:", data);
       }
     } catch (err: any) {
-      set({ loggedIn: false, userId: null, loading: false, errors: [err.message] });
+      // هیچ اروری به کاربر نمایش داده نشه
+      set({ loggedIn: false, userId: null, loading: false });
+      console.log("ℹ️ Auth check failed silently:", err?.message || err);
     }
+  },
+
+  setLoggedOut: () => {
+    set({ loggedIn: false, userId: null, loading: false });
   },
 }));

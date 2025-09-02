@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { logout } from '../other/logout';
 
 // ساخت نمونه axios با baseURL و timeout
 const API = axios.create({
@@ -24,11 +25,20 @@ API.interceptors.response.use(
     console.log('📥 پاسخ دریافت شد:', response);
     return response;
   },
-  (error) => {
+  async (error) => {
+    const status = error?.response?.status;
     console.log('❌ خطا در دریافت پاسخ:', error);
+
+    // اگر 403 بود، توکن را از کوکی حذف کن
+    if (status === 403 || status === 401) {
+      logout()
+    }
+    
+
     return Promise.reject(error);
   }
 );
+
 
 // خروجی
 export default API;

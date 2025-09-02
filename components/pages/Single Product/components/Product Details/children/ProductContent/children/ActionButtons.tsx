@@ -30,75 +30,116 @@ export const ActionButtons: React.FC<ActionButtonsProps> = ({
   const [isLoading, setIsLoading] = useState(false);
 
   const handleAddToCart = async () => {
-    if (isLoading) return; // Prevent multiple clicks
+    if (isLoading) return;
     setIsLoading(true);
   
     try {
       let cartItem;
-     
-      
   
       if (isVariable) {
-        if (!selectedVariationId) return; // Button should be disabled in this case
+        if (!selectedVariationId) return;
+  
         cartItem = {
+          id:mainProductId,
           variation_id: selectedVariationId,
           quantity: quantity || 1,
           attributes: selectedAttributes
         };
-
   
-        // اضافه کردن به لوکال استوریج
-        LocalCart.addVariableProduct(
-          selectedVariationId,
-          quantity || 1,
-          selectedAttributes
+        // گرفتن اطلاعات موجودی variation از API
+        const productData = await API.get(
+          `/products/quantity?type=variable&id=${mainProductId}&variationId=${cartItem.variation_id}`
         );
   
-      } else {
-        if (!isVariable) {
-          cartItem = {
-            id: productId,
-            quantity: quantity || 1
-          };
-        
-          const productData = await API.get(`/products/quantity?type=simple&id=${mainProductId}`);
-        
-          if (productData.status === 200) {
-            const { manage_stock, stock_quantity, stock_status } = productData.data.result;
-        
-            if (manage_stock) {
-              if (stock_status !== "instock" || stock_quantity === 0) {
-                toast.error("Product is out of stock!");
+        if (productData.status === 200) {
+          const { manage_stock, stock_quantity, stock_status } =
+            productData.data.result;
+  
+          if (manage_stock) {
+            if (stock_status !== "instock" || stock_quantity === 0) {
+              toast.error("This variation is out of stock!");
+              setIsLoading(false);
+              return;
+            }
+  
+            const localCart = LocalCart.getCart();
+            const existingItem = localCart.find(
+              (item) =>
+                item.variation_id === selectedVariationId &&
+                JSON.stringify(item.attributes) ===
+                  JSON.stringify(selectedAttributes)
+            );
+  
+            if (existingItem) {
+              if (existingItem.quantity >= stock_quantity) {
+                existingItem.quantity = stock_quantity; // محدود به موجودی واقعی
+                LocalCart.setCart(localCart);
+                toast.error("No more stock available for this variation!");
                 setIsLoading(false);
                 return;
               }
-        
-              const localCart = LocalCart.getCart();
-              const existingItem = localCart.find(item => item.id === productId);
-        
-              if (existingItem) {
-                if (existingItem.quantity >= stock_quantity) {
-                  existingItem.quantity = stock_quantity; // محدود کردن به موجودی واقعی
-                  LocalCart.setCart(localCart); // بروزرسانی لوکال استوریج
-                  toast.error(`No more stock available!`);
-                  setIsLoading(false);
-                  return;
-                }
-              } else {
-                // اگر محصول در لوکال نیست ولی تعداد انتخابی بیشتر از موجودی واقعی است
-                if (cartItem.quantity > stock_quantity) {
-                  cartItem.quantity = stock_quantity;
-                  toast.error(`Only ${stock_quantity} items are available!`);
-                }
+            } else {
+              if (cartItem.quantity > stock_quantity) {
+                cartItem.quantity = stock_quantity;
+                toast.error(`Only ${stock_quantity} items available for this variation!`);
               }
             }
           }
-        
-          // اضافه کردن یا بروزرسانی در localStorage
-          LocalCart.addSimpleProduct(productId, cartItem.quantity);
         }
-        
-        
+  
+        // اضافه یا بروزرسانی در localStorage
+        LocalCart.addVariableProduct(
+          mainProductId,
+          selectedVariationId,
+          cartItem.quantity,
+          selectedAttributes
+        );
+        setCount(count + cartItem.quantity);
+  
+      } else {
+        // این همون کدی هست که خودت برای simple نوشتی
+        cartItem = {
+          id: productId,
+          quantity: quantity || 1
+        };
+  
+        const productData = await API.get(
+          `/products/quantity?type=simple&id=${mainProductId}`
+        );
+  
+        if (productData.status === 200) {
+          const { manage_stock, stock_quantity, stock_status } =
+            productData.data.result;
+  
+          if (manage_stock) {
+            if (stock_status !== "instock" || stock_quantity === 0) {
+              toast.error("Product is out of stock!");
+              setIsLoading(false);
+              return;
+            }
+  
+            const localCart = LocalCart.getCart();
+            const existingItem = localCart.find((item) => item.id === productId);
+  
+            if (existingItem) {
+              if (existingItem.quantity >= stock_quantity) {
+                existingItem.quantity = stock_quantity;
+                LocalCart.setCart(localCart);
+                toast.error(`No more stock available!`);
+                setIsLoading(false);
+                return;
+              }
+            } else {
+              if (cartItem.quantity > stock_quantity) {
+                cartItem.quantity = stock_quantity;
+                toast.error(`Only ${stock_quantity} items are available!`);
+              }
+            }
+          }
+        }
+  
+        LocalCart.addSimpleProduct(productId, cartItem.quantity);
+        setCount(count + cartItem.quantity);
       }
   
       console.log("Cart item added:", cartItem);
@@ -108,6 +149,7 @@ export const ActionButtons: React.FC<ActionButtonsProps> = ({
       setIsLoading(false);
     }
   };
+  
 
   const handleWishlist = () => {
     setIsLiked(!isLiked);

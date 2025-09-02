@@ -5,6 +5,7 @@ import { CartProvider } from '@/contexts/CartContext';
 import Header from '@/components/global/Header/Header';
 import  { Toaster } from 'react-hot-toast';
 import CheckAuth from '@/components/tests/CheckAuth';
+import AuthInitializer from '@/hooks/use-auth-initializer';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
@@ -53,9 +54,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" dir="ltr">
+    <html data-scroll-behavior="smooth" lang="en" dir="ltr">
       <body cz-shortcut-listen="true" className={inter.className}>
         {/* <CheckAuth/> */}
+        <AuthInitializer/>
         <CartProvider>
         <Toaster containerStyle={{fontSize:"13px"}}/>
           <Header />
