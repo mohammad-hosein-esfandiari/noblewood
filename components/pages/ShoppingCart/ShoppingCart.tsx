@@ -20,20 +20,21 @@ export default function ShoppingCart() {
   useEffect(() => {
     const fetchCartTokenAndItems = async () => {
       try {
-        // 1️⃣ خواندن توکن از کوکی
+        // 1️⃣ Get the cart token from cookies
         let cartToken = getTokenCookie("NW-CART");
 
-        // 2️⃣ اگر توکن نبود -> گرفتن توکن از API
+        // 2️⃣ If no token found → request a new token from API
         if (!cartToken) {
           const tokenRes = await fetch("/api/routes/cart/cart-token", {
             method: "GET",
-            credentials: "include",
+            credentials: "include", // include cookies in the request
           });
 
           const tokenData = await tokenRes.json();
           console.log("📥 /cart-token response:", tokenData);
 
           if (tokenData) {
+            // Save the token in cookies for future requests
             setTokenCookie("NW-CART", tokenData);
             console.log("✅ Cart token set in cookie:", tokenData);
             cartToken = tokenData;
@@ -42,16 +43,17 @@ export default function ShoppingCart() {
           }
         }
 
+        // 3️⃣ If still no token → stop and set error
         if (!cartToken) {
           setErrors((prev) => [...prev, "Cart token not found"]);
           return;
         }
 
-        // 3️⃣ گرفتن آیتم‌های سبد خرید با توکن ذخیره شده
+        // 4️⃣ Fetch cart items using the stored token
         const cartRes = await fetch("/api/routes/cart", {
           method: "GET",
           headers: {
-            "X-Cart-Token": cartToken, // فرستادن توکن در هدر
+            "X-Cart-Token": cartToken, // pass the token as a custom header
           },
           credentials: "include",
         });
@@ -60,6 +62,7 @@ export default function ShoppingCart() {
         console.log("📥 /cart response:", cartData);
 
         if (cartRes.ok) {
+          // Save the cart items to state
           setCart(cartData?.result || []);
         } else {
           setErrors((prev) => [...prev, "Failed to fetch cart items"]);
@@ -70,6 +73,7 @@ export default function ShoppingCart() {
       }
     };
 
+    // Run on component mount
     fetchCartTokenAndItems();
   }, []);
 
@@ -77,9 +81,13 @@ export default function ShoppingCart() {
     <div className="p-4">
       <h1 className="text-xl font-bold mb-4">🛒 Cart Items</h1>
 
+      {/* Show error messages if any */}
       {errors.length > 0 &&
-        errors.map((errorMsg, index) => <p key={index} className="text-red-600">{errorMsg}</p>)}
+        errors.map((errorMsg, index) => (
+          <p key={index} className="text-red-600">{errorMsg}</p>
+        ))}
 
+      {/* Show cart items if available, otherwise show empty message */}
       {cart.length > 0 ? (
         <ul className="space-y-2">
           {cart.map((item) => (

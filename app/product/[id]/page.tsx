@@ -56,7 +56,7 @@ export default function ProductPage() {
         <div className="text-center max-w-md mx-auto px-4">
           <div className="text-6xl mb-6">❌</div>
           <h1 className="text-3xl font-bold text-gray-800 mb-4">Product Not Found</h1>
-          <p className="text-gray-600 mb-8">The product you're looking for doesn't exist or has been removed.</p>
+          <p className="text-gray-600 mb-8">The product youre looking for doesnt exist or has been removed.</p>
           <Link
             href="/"
             className="bg-gradient-to-r from-amber-600 to-amber-700 text-white px-8 py-4 rounded-xl hover:from-amber-700 hover:to-amber-800 transition-all duration-300 font-semibold"
