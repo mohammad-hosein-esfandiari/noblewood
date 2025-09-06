@@ -2,6 +2,7 @@
 
 import { getTokenCookie, setTokenCookie } from "@/utils/other/cookie";
 import { useEffect, useState } from "react";
+import { Head } from "./components/Head";
 
 interface CartItem {
   key: string;
@@ -78,29 +79,45 @@ export default function ShoppingCart() {
   }, []);
 
   return (
-    <div className="p-4">
-      <h1 className="text-xl font-bold mb-4">🛒 Cart Items</h1>
+    <>
+      <div className="min-h-screen bg-gray-50 py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Head/>
+        </div>
+        
+      </div>
 
-      {/* Show error messages if any */}
-      {errors.length > 0 &&
-        errors.map((errorMsg, index) => (
-          <p key={index} className="text-red-600">{errorMsg}</p>
-        ))}
-
-      {/* Show cart items if available, otherwise show empty message */}
-      {cart.length > 0 ? (
-        <ul className="space-y-2">
-          {cart.map((item) => (
-            <li key={item.key} className="border rounded-md p-3 shadow-sm bg-white">
-              <p><strong>{item.name}</strong></p>
-              <p>Quantity: {item.quantity}</p>
-              <p>Price: {(item.prices?.price ?? 0) / 100} {item.prices?.currency_code ?? ""}</p>
-            </li>
+      <div>
+        {/* Show error messages if any */}
+        {errors.length > 0 &&
+          errors.map((errorMsg, index) => (
+            <p key={index} className="text-red-600">
+              {errorMsg}
+            </p>
           ))}
-        </ul>
-      ) : (
-        errors.length === 0 && <p>Your cart is empty.</p>
-      )}
-    </div>
+
+        {/* Show cart items if available, otherwise show empty message */}
+        {cart.length > 0 ? (
+          <ul className="space-y-2">
+            {cart.map((item) => (
+              <li
+                key={item.key}
+                className="border rounded-md p-3 shadow-sm bg-white">
+                <p>
+                  <strong>{item.name}</strong>
+                </p>
+                <p>Quantity: {item.quantity}</p>
+                <p>
+                  Price: {(item.prices?.price ?? 0) / 100}{" "}
+                  {item.prices?.currency_code ?? ""}
+                </p>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          errors.length === 0 && <p>Your cart is empty.</p>
+        )}
+      </div>
+    </>
   );
 }

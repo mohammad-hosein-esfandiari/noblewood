@@ -46,7 +46,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   return (
     <div className="inset-0 bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 w-full min-h-[100vh]">
-
       <SingleProduct productData={productData} />
     </div>
   );
