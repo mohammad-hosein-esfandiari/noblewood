@@ -1,55 +1,42 @@
-import type { NextRequest } from 'next/server';
-import { NextResponse } from 'next/server';
-import jwt from 'jsonwebtoken';
-import axios from 'axios';
+import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
+import API from "./utils/interceptor/interceptor";
 
 export async function middleware(request: NextRequest) {
-  const token = request.cookies.get('NW-AUTH')?.value;
-
+  const token = request.cookies.get("NW-AUTH")?.value;
+  console.log(token)
   if (!token) {
     return NextResponse.json(
-      { status: 'error', statusCode: 401, message: 'Token missing' },
+      { status: "error", statusCode: 401, message: "Token missing" },
       { status: 401 }
     );
   }
 
   try {
-    // دیکد JWT
-    const decoded: any = jwt.verify(token, process.env.JWT_SECRET || 'secretkey');
+    // 🔹 استفاده از API برای چک کردن توکن
+    const res = await API.get("/auth", {withCredentials: true});
+    // console.log("middlware : ", res.data)
+    // if (res.data.status !== "success") {
+    //   return NextResponse.json(
+    //     { status: "error", statusCode: 401, message: "Invalid token" },
+    //     { status: 401 }
+    //   );
+    // }
 
-    // تماس با وردپرس برای اعتبارسنجی واقعی
-    const WP_URL = process.env.WP_API_URL;
-    if (!WP_URL) throw new Error('WORDPRESS_URL not defined');
-
-    const wpResponse = await axios.post(
-      `${WP_URL}/verify-token`,
-      {},
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
-
-    if (wpResponse.data.status !== 'success') {
-      return NextResponse.json(
-        { status: 'error', statusCode: 401, message: 'Invalid token' },
-        { status: 401 }
-      );
-    }
-
-    // ایجاد پاسخ و ست کردن اطلاعات کاربر در هدر
+    // 🔹 ست کردن user_id در هدر پاسخ
     const response = NextResponse.next();
-    // میتونی هر داده‌ای که لازم داری اضافه کنی
-    response.headers.set('x-user-id', decoded.user_id);
-    response.headers.set('x-user-email', decoded.email);
-    response.headers.set('x-user-name', decoded.display_name);
+    // if (res.data.userId) {
+    //   response.headers.set("x-user-id", String(res.data.userId));
+    // }
 
-    return response;
+    // return response;
   } catch (err: any) {
     return NextResponse.json(
       {
-        status: 'error',
+        status: "error",
         statusCode: 401,
-        message: err.response?.data?.message || 'Invalid or expired token',
+        message:
+           "Invalid or expired token",
       },
       { status: 401 }
     );
@@ -57,5 +44,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/api/routes/protected/:path*'], // مسیرهای محافظت شده
+  matcher: ["/api/routes/protected/:path*"], // مسیرهای محافظت شده
 };

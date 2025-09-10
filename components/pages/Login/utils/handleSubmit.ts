@@ -19,7 +19,7 @@ export const handleSubmit = async (
     });
 
     console.log(result)
-    toast.success("Login successfullll!");
+    toast.success("Login successfull!");
     redirect("/");
   } catch (err: any) {
     console.log(err)
