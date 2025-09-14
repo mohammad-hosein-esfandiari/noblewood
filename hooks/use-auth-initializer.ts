@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { useAuthStore } from "@/store/auth";
 import API from "@/utils/interceptor/interceptor";
+import { LocalCart } from "@/utils/global/localCart";
 
 const AuthInitializer: React.FC = () => {
   const refreshAuth = useAuthStore((state) => state.refreshAuth);
@@ -13,19 +14,27 @@ const AuthInitializer: React.FC = () => {
     void refreshAuth();
   }, [refreshAuth]);
 
-  // 2️⃣ وقتی وضعیت لاگین تغییر کرد → درخواست کارت بزن
+  // 2️⃣ وقتی وضعیت لاگین تغییر کرد → درخواست مرج کارت بزن
   useEffect(() => {
     if (loggedIn) {
-      const fetchCart = async () => {
+      const mergeCart = async () => {
         try {
-          const res = await API.get("/protected/cart", { withCredentials: true });
-          console.log("🛒 Cart response:", res.data);
+          // گرفتن آیتم‌های محلی
+          const localCartItems = LocalCart.getCart(); 
+
+          const res = await API.post(
+            "/protected/cart/merge",
+            { cart_items: localCartItems }, // 👈 اینجا body
+            { withCredentials: true } // 👈 اینجا تنظیمات
+          );
+
+          console.log("🛒 Cart merge response:", res.data);
         } catch (err) {
-          console.error("❌ Error fetching cart:", err);
+          console.error("❌ Error merging cart:", err);
         }
       };
 
-      fetchCart();
+      mergeCart();
     }
   }, [loggedIn]);
 

@@ -30,7 +30,7 @@ API.interceptors.response.use(
     console.log('❌ خطا در دریافت پاسخ:', error);
 
     // اگر 403 بود، توکن را از کوکی حذف کن
-    if (status === 403  ) {
+    if (status === 403  || status === 401) {
       logout()
     }
     
