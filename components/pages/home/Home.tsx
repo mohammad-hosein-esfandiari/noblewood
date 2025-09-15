@@ -92,7 +92,6 @@ export const Home = async () => {
   if (!brandsRes.ok) errors.push("Failed to load brands.");
   if (!productsRes.ok) errors.push("Failed to load products.");
 
-  console.log(products)
 
   return (
     <div>

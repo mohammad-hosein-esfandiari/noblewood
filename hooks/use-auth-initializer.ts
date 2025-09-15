@@ -5,40 +5,53 @@ import { useAuthStore } from "@/store/auth";
 import API from "@/utils/interceptor/interceptor";
 import { LocalCart } from "@/utils/global/localCart";
 
+/**
+ * AuthInitializer component
+ * - Checks user authentication on page load.
+ * - Handles merging the local cart with the server cart if logged in.
+ * - Fetches local cart data if the user is not logged in.
+ */
 const AuthInitializer: React.FC = () => {
   const refreshAuth = useAuthStore((state) => state.refreshAuth);
   const loggedIn = useAuthStore((state) => state.loggedIn);
 
-  // 1️⃣ وقتی کامپوننت لود شد → auth چک بشه
+  // 1️⃣ Check authentication when component mounts
   useEffect(() => {
     void refreshAuth();
   }, [refreshAuth]);
 
-  // 2️⃣ وقتی وضعیت لاگین تغییر کرد → درخواست مرج کارت بزن
+  // 2️⃣ Handle cart based on login status
   useEffect(() => {
-    if (loggedIn) {
-      const mergeCart = async () => {
-        try {
-          // گرفتن آیتم‌های محلی
-          const localCartItems = LocalCart.getCart(); 
+    const handleCart = async () => {
+      try {
+        if (loggedIn) {
+          // ✅ Logged-in user
+          const localCartItems = LocalCart.getCart(); // Get local cart items
+          let res;
 
-          const res = await API.post(
-            "/protected/cart/merge",
-            { cart_items: localCartItems }, // 👈 اینجا body
-            { withCredentials: true } // 👈 اینجا تنظیمات
-          );
+          if (localCartItems.length > 0) {
+            // Merge local cart with server cart
+            res = await API.post(
+              "/protected/cart/merge",
+              { cart_items: localCartItems },
+              { withCredentials: true }
+            );
+          } else {
+            // Fetch server cart if local cart is empty
+            res = await API.get("/protected/cart", { withCredentials: true });
+          }
 
-          console.log("🛒 Cart merge response:", res.data);
-        } catch (err) {
-          console.error("❌ Error merging cart:", err);
-        }
-      };
+          console.log("🛒 Cart response:", res.data);
+        } 
+      } catch (error) {
+        console.error("❌ Error handling cart:", error);
+      }
+    };
 
-      mergeCart();
-    }
+    void handleCart();
   }, [loggedIn]);
 
-  return null; // فقط برای initialize
+  return null; // Only for initialization
 };
 
 export default AuthInitializer;

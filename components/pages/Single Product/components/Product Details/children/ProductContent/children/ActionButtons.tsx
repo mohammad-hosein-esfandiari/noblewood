@@ -1,6 +1,5 @@
 import { Heart, Share2, ShoppingCart } from 'lucide-react'
 import React, { useState } from 'react'
-import { addToCart } from '@/utils/global/addToCart';
 import { useCartStore } from '@/store/cart';
 import { LocalCart } from '@/utils/global/localCart';
 import API from '@/utils/interceptor/interceptor';

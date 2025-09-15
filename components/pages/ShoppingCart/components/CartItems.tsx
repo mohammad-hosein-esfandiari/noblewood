@@ -1,35 +1,13 @@
+import { CartObjectAPI } from "@/types/shopping-cart";
 import { Minus, Plus, Trash2 } from "lucide-react";
 import Image from "next/image";
-import React from "react";
+import React, { FC } from "react";
 
-const cartItems = [
-  {
-    id: "1",
-    name: "Handcrafted Wooden Chair",
-    category: "chairs",
-    price: 120,
-    quantity: 2,
-    image: "/images/chair.jpg",
-  },
-  {
-    id: "2",
-    name: "Rustic Oak Dining Table",
-    category: "tables",
-    price: 350,
-    quantity: 1,
-    image: "/images/table.jpg",
-  },
-  {
-    id: "3",
-    name: "Decorative Wooden Box",
-    category: "decorative",
-    price: 45,
-    quantity: 3,
-    image: "/images/decor.jpg",
-  },
-];
+interface CartItemsProps {
+  cart:CartObjectAPI[]
+}
 
-export const CartItems = () => {
+export const CartItems:FC<CartItemsProps> = ({cart}) => {
   return (
     <div className="lg:col-span-2">
       <div className="bg-white rounded-xl shadow-lg overflow-hidden">
@@ -39,27 +17,28 @@ export const CartItems = () => {
           </h2>
         </div>
         <div className="divide-y divide-gray-200">
-          {cartItems.map((item) => (
+          {cart.map((item) => (
             <div key={item.id} className="p-6">
               <div className="flex items-center  space-x-4 rtl:space-x-reverse">
                 {/* Replace with Next.js <Image /> if needed */}
                 <div className="bg-gray-50 rounded-lg w-24 h-24">
 
-                {/* <Image
-                  src={item.image}
-                  alt={item.name}
-                  className="w-20 h-20 object-cover rounded-lg"
-                /> */}
+                <Image
+                  src={item.image_url}
+                  alt={item.product_name}
+                  height={24}
+                  width={24}
+                  priority
+                  className="w-24 h-24 object-cover rounded-lg"
+                />
                 </div>
 
                 <div className="flex-1">
                   <h3 className="text-lg font-semibold text-gray-800 mb-1">
-                    {item.name}
+                    {item.product_name}
                   </h3>
                   <p className="text-sm text-gray-600 mb-2">
-                    {item.category === "chairs" && "Wooden Chair"}
-                    {item.category === "tables" && "Wooden Table"}
-                    {item.category === "decorative" && "Decorative Box"}
+                      category
                   </p>
                   <p className="text-xl font-bold text-amber-700">
                     {item.price}$
