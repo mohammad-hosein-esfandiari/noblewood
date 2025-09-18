@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 interface HeadProps {
-  count : number 
+  count : number | null
 }
 
 export const Head:FC<HeadProps> = ({count}) => {

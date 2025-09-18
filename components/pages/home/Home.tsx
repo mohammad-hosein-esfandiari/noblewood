@@ -84,7 +84,7 @@ export const Home = async () => {
         total_products: 0,
       };
 
-      console.log(productsRes?.data?.default_data)
+
 
   // Collect errors from all fetches
   const errors = [];

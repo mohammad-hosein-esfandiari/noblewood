@@ -24,8 +24,6 @@ export async function middleware(request: NextRequest) {
     );
 
     const data = await res.json();
-    console.log("✅ Verify response:", data);
-
     if (data.status !== "success") {
       return NextResponse.json(
         { status: "error", statusCode: 401, message: "Invalid token" },

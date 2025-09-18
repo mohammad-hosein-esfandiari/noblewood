@@ -7,7 +7,7 @@ interface AuthState {
   userId: number | null;
   loading: boolean;
   errors: string[];
-  refreshAuth: () => Promise<void>;
+  refreshAuth: (cookie : string | null) => Promise<void>;
   setLoggedOut: () => void; // ← اضافه شد
 }
 
@@ -17,9 +17,9 @@ export const useAuthStore = create<AuthState>((set) => ({
   loading: true,
   errors: [],
 
-  refreshAuth: async () => {
+  refreshAuth: async (cookie:string |null) => {
     set({ loading: true, errors: [] });
-    const cookie = getTokenCookie("NW-AUTH");
+
 
     if (cookie) {
       try {

@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
       username: user.username,
       email: user.email,
       display_name: user.display_name,
-    }, process.env.JWT_SECRET || "secretkey", { expiresIn: "30d" });
+    }, process.env.JWT_SECRET || "secretkey", { expiresIn: rememberMe ? "10d" : "1d" });
 
     // 3️⃣ ارسال JWT به وردپرس برای ذخیره در دیتابیس
     try {
@@ -55,6 +55,7 @@ export async function POST(request: NextRequest) {
         token,
         ip: request.headers.get("x-forwarded-for") || null,
         userAgent: request.headers.get("user-agent") || null,
+        rememberMe : rememberMe 
       });
     } catch (saveError: any) {
       console.error("Error saving token in WP:", saveError);
