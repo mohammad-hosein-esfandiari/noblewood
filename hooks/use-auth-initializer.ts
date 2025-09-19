@@ -62,7 +62,7 @@ const AuthInitializer: React.FC<AuthInitializerProps> = ({ cookie }) => {
     };
 
     void handleCart();
-  }, [loggedIn]);
+  }, [loggedIn,cookie]);
 
   return null; // Only for initialization
 };

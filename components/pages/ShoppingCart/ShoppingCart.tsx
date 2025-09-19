@@ -17,7 +17,7 @@ export const ShoppingCart: FC<ShoppingCartProps> = ({ data }) => {
         <Head count={data?.total_items ? data.total_items : null} />
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <CartItems cart={data!.cart_items} />
-          <OrderSummery />
+          <OrderSummery price={data!.total_price} />
         </div>
       </Container>
     </div>

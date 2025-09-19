@@ -94,7 +94,7 @@ export const LocalCart = {
   clearCart() {
     try {
       localStorage.removeItem(LOCAL_CART_KEY);
-      toast.success("Cart cleared!");
+      // toast.success("Cart cleared!");
     } catch (err: any) {
       console.error("Failed to clear cart:", err.message);
       toast.error("Failed to clear cart!");

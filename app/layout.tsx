@@ -1,11 +1,6 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { CartProvider } from "@/contexts/CartContext";
-import Header from "@/components/global/Header/Header";
-import { Toaster } from "react-hot-toast";
-import CheckAuth from "@/components/tests/CheckAuth";
-import AuthInitializer from "@/hooks/use-auth-initializer";
 import { MainLayout } from "@/components/global/Layout/MainLayout";
 const inter = Inter({ subsets: ["latin"] });
 

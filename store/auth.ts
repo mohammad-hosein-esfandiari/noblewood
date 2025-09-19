@@ -9,6 +9,8 @@ interface AuthState {
   errors: string[];
   refreshAuth: (cookie : string | null) => Promise<void>;
   setLoggedOut: () => void; // ← اضافه شد
+  setLoggedIn: (userId: number) => void; // ✅ متد جدید
+
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -44,5 +46,8 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   setLoggedOut: () => {
     set({ loggedIn: false, userId: null, loading: false });
+  },
+  setLoggedIn: (userId: number) => {
+    set({ loggedIn: true, userId, loading: false });
   },
 }));

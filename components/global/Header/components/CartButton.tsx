@@ -14,7 +14,7 @@ export const CartButton:FC<CartButtonProps > = ({isScrolled ,cartCount}) => {
      
   return (
     <Link
-    href="/cart2"
+    href="/cart"
     className={`relative p-3 rounded-xl transition-all duration-300 hover:scale-110 group ${
       isScrolled
         ? "text-amber-900 hover:text-amber-700 hover:bg-amber-100/20"

@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import { InitialValuesType } from "./initialValues";
 import { loginUser } from "@/utils/other/login";
 import { setTokenCookie } from "@/utils/other/cookie";
+import { useAuthStore } from "@/store/auth";
 
 
 export const handleSubmit = async (
@@ -20,12 +21,14 @@ export const handleSubmit = async (
 
     console.log(result)
     toast.success("Login successfull!");
+    useAuthStore.getState().setLoggedIn(result.id)
     redirect("/");
   } catch (err: any) {
     console.log(err)
     toast.error(err.response?.data?.message || "❌ Failedddd to login", {
       duration: 3000,
     });
+    useAuthStore.getState().setLoggedOut()
   } finally {
     setSubmitting(false);
   }
